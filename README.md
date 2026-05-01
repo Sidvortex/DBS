@@ -1,4 +1,4 @@
-# 🩺 DBS — Diabetes Prediction System
+# 🩺 DPS — Diabetes Prediction System
 
 A machine learning-powered web application that predicts the likelihood of diabetes using clinical biomarkers. Built with Django and trained on the **PIMA Indian Diabetes Dataset**.
 
