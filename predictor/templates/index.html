@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Diabetes Prediction System</title>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    /* ═══════════════════════════════════════
+       90s APPLE MACINTOSH — System 7/8 Era
+    ═══════════════════════════════════════ */
+    :root {
+      --bg:          #c8c0b0;
+      --window-bg:   #f0ece0;
+      --chrome:      #d4ccbc;
+      --chrome-dark: #a09888;
+      --stripe1:     #8a7060;
+      --stripe2:     #c0b8a8;
+      --text:        #1a1008;
+      --text-mid:    #4a3828;
+      --text-light:  #7a6858;
+      --border-dark: #5a4838;
+      --border-mid:  #9a8878;
+      --border-light:#e0d8c8;
+      --btn-face:    #d8d0c0;
+      --btn-hi:      #f0ece4;
+      --btn-shadow:  #706050;
+      --accent:      #8b3a3a;
+      --accent2:     #2a5a8b;
+      --green:       #2a6a2a;
+      --red-pill:    #8b1a1a;
+      --selection:   #000080;
+      --sel-text:    #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,.04) 1px, rgba(0,0,0,.04) 2px),
+        repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0,0,0,.04) 1px, rgba(0,0,0,.04) 2px);
+      background-size: 8px 8px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 13px;
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 0 40px 0;
+    }
+
+    /* ── MENU BAR ── */
+    .menubar {
+      background: linear-gradient(180deg, #f0ece4 0%, #d8d0c0 100%);
+      border-bottom: 2px solid var(--border-dark);
+      height: 22px;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      gap: 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 0 var(--border-light);
+    }
+    .menubar-apple {
+      font-size: 17px;
+      margin-right: 12px;
+      cursor: default;
+      padding: 0 6px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      font-weight: 900;
+      color: #1a1008;
+    }
+    .menubar-apple:hover { background: var(--selection); color: var(--sel-text); }
+    .menu-item {
+      padding: 0 10px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      cursor: default;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .menu-item:hover { background: var(--selection); color: var(--sel-text); }
+    .menubar-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--text-mid);
+    }
+
+    /* ── WINDOW ── */
+    .desktop { padding: 16px; display: flex; flex-direction: column; gap: 14px; max-width: 1100px; margin: 0 auto; }
+
+    .window {
+      background: var(--window-bg);
+      border: 2px solid var(--border-dark);
+      box-shadow:
+        inset 1px 1px 0 var(--btn-hi),
+        inset -1px -1px 0 var(--btn-shadow),
+        3px 3px 0 var(--border-dark),
+        4px 4px 0 rgba(0,0,0,.3);
+    }
+
+    .window-titlebar {
+      background: linear-gradient(180deg, #a09080 0%, #7a6858 50%, #8a7868 100%);
+      padding: 4px 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 2px solid var(--border-dark);
+      position: relative;
+      min-height: 22px;
+    }
+    .window-titlebar.inactive {
+      background: linear-gradient(180deg, #c8c0b0 0%, #b0a898 100%);
+    }
+
+    /* Mac title bar stripes */
+    .titlebar-stripes {
+      position: absolute;
+      left: 0; right: 0; top: 0; bottom: 0;
+      background-image: repeating-linear-gradient(
+        180deg,
+        transparent 0px, transparent 1px,
+        rgba(0,0,0,.15) 1px, rgba(0,0,0,.15) 2px
+      );
+      pointer-events: none;
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 4px;
+      position: relative;
+      z-index: 1;
+    }
+    .wctrl {
+      width: 13px; height: 13px;
+      border: 1.5px solid var(--border-dark);
+      background: linear-gradient(135deg, var(--btn-hi) 0%, var(--btn-face) 50%, var(--btn-shadow) 100%);
+      box-shadow: inset 1px 1px 0 rgba(255,255,255,.5), 1px 1px 0 rgba(0,0,0,.3);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 9px;
+      font-weight: 900;
+      color: var(--border-dark);
+    }
+    .wctrl:active { background: var(--btn-shadow); }
+
+    .window-title {
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--window-bg);
+      text-shadow: 0 -1px 0 rgba(0,0,0,.4), 0 1px 0 rgba(255,255,255,.1);
+      font-family: 'IBM Plex Sans', sans-serif;
+      letter-spacing: .5px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .window-body { padding: 14px; }
+    .window-statusbar {
+      background: linear-gradient(180deg, #c8c0b0, #b8b0a0);
+      border-top: 2px solid var(--border-dark);
+      padding: 3px 10px;
+      font-size: 11px;
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--text-mid);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* ── STAT BOXES ── */
+    .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 0; }
+    .stat-box {
+      background: var(--window-bg);
+      border: 2px solid var(--border-dark);
+      box-shadow: inset 1px 1px 0 var(--btn-hi), inset -1px -1px 0 var(--btn-shadow), 2px 2px 0 var(--border-dark);
+      padding: 10px 12px;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'VT323', monospace;
+      font-size: 32px;
+      color: var(--accent2);
+      line-height: 1;
+    }
+    .stat-label { font-size: 11px; color: var(--text-light); margin-top: 2px; font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; letter-spacing: .5px; }
+
+    /* ── FORM ELEMENTS ── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .field-wrap { display: flex; flex-direction: column; gap: 3px; }
+    .field-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+    .mac-input {
+      background: white;
+      border: 2px solid var(--border-dark);
+      box-shadow: inset 2px 2px 4px rgba(0,0,0,.15), inset -1px -1px 0 var(--border-light);
+      padding: 4px 8px;
+      font-size: 13px;
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--text);
+      outline: none;
+      width: 100%;
+    }
+    .mac-input:focus {
+      border-color: var(--selection);
+      box-shadow: inset 2px 2px 4px rgba(0,0,0,.2), 0 0 0 1px var(--selection);
+    }
+    .field-hint { font-size: 10px; color: var(--text-light); font-family: 'IBM Plex Mono', monospace; }
+    .field-error { font-size: 11px; color: var(--red-pill); font-family: 'IBM Plex Mono', monospace; }
+
+    /* ── BUTTON ── */
+    .mac-btn {
+      background: linear-gradient(180deg, var(--btn-hi) 0%, var(--btn-face) 40%, #c0b8a8 100%);
+      border: 2px solid var(--border-dark);
+      box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,.8),
+        inset -1px -1px 0 var(--btn-shadow),
+        2px 2px 0 var(--border-dark),
+        3px 3px 0 rgba(0,0,0,.25);
+      padding: 7px 28px;
+      font-size: 13px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      letter-spacing: .3px;
+      transition: none;
+      outline: none;
+    }
+    .mac-btn:active {
+      background: linear-gradient(180deg, #a09880 0%, var(--btn-face) 60%, var(--btn-hi) 100%);
+      box-shadow:
+        inset 2px 2px 4px rgba(0,0,0,.2),
+        1px 1px 0 var(--border-dark);
+      transform: translate(2px, 2px);
+    }
+    .mac-btn.default {
+      border-width: 3px;
+      border-color: var(--text);
+    }
+    .btn-row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px; }
+
+    /* ── DIVIDER ── */
+    .mac-divider {
+      height: 2px;
+      background: linear-gradient(90deg, var(--border-dark), var(--border-mid), var(--border-light), var(--border-mid), var(--border-dark));
+      margin: 12px 0;
+    }
+
+    /* ── RESULT BOX ── */
+    .result-dialog {
+      background: var(--window-bg);
+      border: 2px solid var(--border-dark);
+      box-shadow: inset 1px 1px 0 var(--btn-hi), inset -1px -1px 0 var(--btn-shadow), 3px 3px 0 var(--border-dark);
+      padding: 16px;
+    }
+    .dialog-icon-row { display: flex; align-items: flex-start; gap: 14px; }
+    .dialog-icon {
+      width: 48px; height: 48px;
+      flex-shrink: 0;
+      border: 2px solid var(--border-dark);
+      box-shadow: 2px 2px 0 var(--border-dark);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+    }
+    .dialog-icon.danger { background: #f0d0c0; }
+    .dialog-icon.success { background: #c0e0c0; }
+    .dialog-icon.warning { background: #f0e8c0; }
+
+    .result-label {
+      font-family: 'VT323', monospace;
+      font-size: 28px;
+      letter-spacing: 1px;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .result-label.danger { color: var(--red-pill); }
+    .result-label.success { color: var(--green); }
+    .result-label.warning { color: #7a5a10; }
+
+    .confidence-track {
+      height: 14px;
+      background: white;
+      border: 2px solid var(--border-dark);
+      box-shadow: inset 2px 2px 3px rgba(0,0,0,.15);
+      margin: 8px 0 4px;
+      position: relative;
+      overflow: hidden;
+    }
+    .confidence-fill {
+      height: 100%;
+      background: repeating-linear-gradient(
+        45deg,
+        var(--accent2) 0px, var(--accent2) 5px,
+        #4a7aab 5px, #4a7aab 10px
+      );
+      background-size: 14px 14px;
+      transition: width 1.2s steps(20);
+    }
+    .confidence-fill.danger {
+      background: repeating-linear-gradient(
+        45deg,
+        var(--red-pill) 0px, var(--red-pill) 5px,
+        #b04040 5px, #b04040 10px
+      );
+    }
+    .confidence-fill.success {
+      background: repeating-linear-gradient(
+        45deg,
+        var(--green) 0px, var(--green) 5px,
+        #3a8a3a 5px, #3a8a3a 10px
+      );
+    }
+
+    .risk-tag {
+      display: inline-block;
+      border: 2px solid var(--border-dark);
+      padding: 2px 10px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 2px 2px 0 var(--border-dark);
+    }
+    .risk-tag.High { background: #e8c0c0; color: var(--red-pill); }
+    .risk-tag.Moderate { background: #e8e0b8; color: #6a4a08; }
+    .risk-tag.Low { background: #c0e0c0; color: var(--green); }
+
+    /* ── TABLES ── */
+    .mac-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .mac-table thead tr {
+      background: repeating-linear-gradient(
+        180deg,
+        #c0b8a8 0px, #c0b8a8 1px,
+        #d0c8b8 1px, #d0c8b8 2px
+      );
+    }
+    .mac-table th {
+      padding: 5px 10px;
+      text-align: left;
+      border: 1px solid var(--border-dark);
+      font-size: 11px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--text-mid);
+    }
+    .mac-table td {
+      padding: 4px 10px;
+      border: 1px solid var(--border-mid);
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--text);
+    }
+    .mac-table tbody tr:nth-child(even) { background: #e8e0d0; }
+    .mac-table tbody tr:hover { background: #d8d0f8; }
+
+    /* ── HISTORY ── */
+    .hist-diabetic { color: var(--red-pill); font-weight: 600; }
+    .hist-not { color: var(--green); font-weight: 600; }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 16px; }
+    ::-webkit-scrollbar-track { background: var(--chrome); border-left: 2px solid var(--border-dark); }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--btn-hi), var(--btn-face), var(--btn-shadow));
+      border: 2px solid var(--border-dark);
+    }
+    ::-webkit-scrollbar-button { background: var(--btn-face); border: 2px solid var(--border-dark); height: 16px; }
+
+    /* ── LAYOUT ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .full-col { grid-column: 1 / -1; }
+    .section-header {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-light);
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px dashed var(--border-mid);
+    }
+
+    /* placeholder state */
+    .empty-state {
+      text-align: center;
+      padding: 30px;
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--text-light);
+      font-size: 12px;
+    }
+    .empty-state .big { font-family: 'VT323', monospace; font-size: 40px; display: block; margin-bottom: 6px; color: var(--border-mid); }
+
+    @media (max-width: 768px) {
+      .two-col, .form-grid, .stat-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── MENU BAR ── -->
+<div class="menubar">
+  <div class="menubar-apple">&#63743;</div>
+  <div class="menu-item">File</div>
+  <div class="menu-item">Edit</div>
+  <div class="menu-item">View</div>
+  <div class="menu-item">Predict</div>
+  <div class="menu-item">Help</div>
+  <div class="menubar-right">
+    <span>{{ model_name }}</span>
+    <span>&#9670;</span>
+    <span>Accuracy: {{ model_acc }}%</span>
+    <span>&#9670;</span>
+    <span id="clock">--:-- --</span>
+  </div>
+</div>
+
+<div class="desktop">
+
+  <!-- ── TITLE WINDOW ── -->
+  <div class="window">
+    <div class="window-titlebar">
+      <div class="titlebar-stripes"></div>
+      <div class="window-controls">
+        <div class="wctrl">&#9632;</div>
+        <div class="wctrl"></div>
+      </div>
+      <div class="window-title">&#128203; Diabetes Prediction System — DiabetesPrediction.app</div>
+    </div>
+    <div class="window-body" style="padding: 10px 14px;">
+      <div class="stat-row">
+        <div class="stat-box">
+          <div class="stat-num">{{ stats.total }}</div>
+          <div class="stat-label">Records</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--red-pill)">{{ stats.diabetic }}</div>
+          <div class="stat-label">Diabetic</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--green)">{{ stats.healthy }}</div>
+          <div class="stat-label">Non-Diabetic</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--accent2)">{{ stats.avg_glucose }}</div>
+          <div class="stat-label">Avg Glucose</div>
+        </div>
+      </div>
+    </div>
+    <div class="window-statusbar">
+      <span>4 items, 768 records loaded</span>
+      <span>Model: {{ model_name }} | {{ model_acc }}% test accuracy</span>
+    </div>
+  </div>
+
+  <!-- ── MAIN TWO-COL ── -->
+  <div class="two-col">
+
+    <!-- ── INPUT WINDOW ── -->
+    <div class="window">
+      <div class="window-titlebar">
+        <div class="titlebar-stripes"></div>
+        <div class="window-controls">
+          <div class="wctrl">&#9632;</div>
+          <div class="wctrl"></div>
+        </div>
+        <div class="window-title">&#128221; Patient Data Entry</div>
+      </div>
+      <div class="window-body">
+        <form method="POST" novalidate>
+          {% csrf_token %}
+          <div class="form-grid">
+            {% for field in form %}
+            <div class="field-wrap">
+              <label class="field-label">{{ field.label }}</label>
+              {{ field }}
+              {% if field.errors %}<div class="field-error">⚠ {{ field.errors.0 }}</div>{% endif %}
+              <div class="field-hint">{{ field.help_text }}</div>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="mac-divider"></div>
+          <div class="btn-row">
+            <button type="button" class="mac-btn" onclick="this.closest('form').reset()">Clear</button>
+            <button type="submit" class="mac-btn default">&#128269; Run Prediction</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ── RIGHT COLUMN ── -->
+    <div style="display:flex; flex-direction:column; gap:14px;">
+
+      <!-- Result Window -->
+      <div class="window">
+        <div class="window-titlebar {% if not result %}inactive{% endif %}">
+          <div class="titlebar-stripes"></div>
+          <div class="window-controls">
+            <div class="wctrl">&#9632;</div>
+            <div class="wctrl"></div>
+          </div>
+          <div class="window-title">&#128193; Prediction Result</div>
+        </div>
+        <div class="window-body">
+          {% if result %}
+          <div class="result-dialog">
+            <div class="dialog-icon-row">
+              <div class="dialog-icon {{ result.color }}">
+                {% if result.label_int == 1 %}&#9888;{% else %}&#10003;{% endif %}
+              </div>
+              <div style="flex:1">
+                <div class="result-label {{ result.color }}">{{ result.label|upper }}</div>
+                <div style="font-size:12px; color:var(--text-mid); font-family:'IBM Plex Mono',monospace;">
+                  Risk Level: <span class="risk-tag {{ result.risk_level }}">{{ result.risk_level }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="mac-divider"></div>
+            <div style="font-size:11px; font-family:'IBM Plex Mono',monospace; color:var(--text-light); margin-bottom:4px;">
+              CONFIDENCE: {{ result.confidence }}%
+            </div>
+            <div class="confidence-track">
+              <div class="confidence-fill {{ result.color }}" style="width:{{ result.confidence }}%"></div>
+            </div>
+            <div style="font-size:11px; color:var(--text-light); font-family:'IBM Plex Mono',monospace; margin-top:8px; font-style:italic;">
+              {% if result.label_int == 1 %}Please consult a healthcare professional for confirmed diagnosis.{% else %}Maintain a healthy lifestyle to keep diabetes risk low.{% endif %}
+            </div>
+          </div>
+          {% else %}
+          <div class="empty-state">
+            <span class="big">&#9744;</span>
+            No prediction yet.<br>Enter patient data and click Run Prediction.
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- History Window -->
+      {% if history %}
+      <div class="window">
+        <div class="window-titlebar inactive">
+          <div class="titlebar-stripes"></div>
+          <div class="window-controls">
+            <div class="wctrl">&#9632;</div>
+            <div class="wctrl"></div>
+          </div>
+          <div class="window-title">&#128347; Recent Predictions Log</div>
+        </div>
+        <div class="window-body" style="padding: 10px;">
+          <table class="mac-table">
+            <thead>
+              <tr><th>Date</th><th>Gluc</th><th>BMI</th><th>Age</th><th>Result</th><th>Conf.</th></tr>
+            </thead>
+            <tbody>
+              {% for r in history %}
+              <tr>
+                <td>{{ r.created_at|date:"d/m H:i" }}</td>
+                <td>{{ r.glucose }}</td>
+                <td>{{ r.bmi }}</td>
+                <td>{{ r.age }}</td>
+                <td class="{% if r.prediction == 'Diabetic' %}hist-diabetic{% else %}hist-not{% endif %}">{{ r.prediction }}</td>
+                <td>{{ r.confidence }}%</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="window-statusbar"><span>{{ history|length }} recent items shown</span><span>Sorted by date ▼</span></div>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+  <!-- ── RISK TABLES ── -->
+  <div class="two-col">
+    <div class="window">
+      <div class="window-titlebar inactive">
+        <div class="titlebar-stripes"></div>
+        <div class="window-controls"><div class="wctrl">&#9632;</div><div class="wctrl"></div></div>
+        <div class="window-title">&#9888; High-Risk Patient Profiles</div>
+      </div>
+      <div class="window-body" style="padding:10px;">
+        <table class="mac-table">
+          <thead><tr>{% for key in high_risk.0.keys %}<th>{{ key }}</th>{% endfor %}</tr></thead>
+          <tbody>{% for p in high_risk %}<tr>{% for v in p.values %}<td>{{ v|floatformat:1 }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+        </table>
+      </div>
+      <div class="window-statusbar"><span>Top 5 highest-risk patients</span><span>Sorted: Glucose ↓</span></div>
+    </div>
+    <div class="window">
+      <div class="window-titlebar inactive">
+        <div class="titlebar-stripes"></div>
+        <div class="window-controls"><div class="wctrl">&#9632;</div><div class="wctrl"></div></div>
+        <div class="window-title">&#10003; Low-Risk Patient Profiles</div>
+      </div>
+      <div class="window-body" style="padding:10px;">
+        <table class="mac-table">
+          <thead><tr>{% for key in low_risk.0.keys %}<th>{{ key }}</th>{% endfor %}</tr></thead>
+          <tbody>{% for p in low_risk %}<tr>{% for v in p.values %}<td>{{ v|floatformat:1 }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+        </table>
+      </div>
+      <div class="window-statusbar"><span>Top 5 lowest-risk patients</span><span>Sorted: Glucose ↑</span></div>
+    </div>
+  </div>
+
+</div><!-- /desktop -->
+
+<!-- Fix input styles from Django form -->
+<script>
+  // Apply mac-input class to all form inputs
+  document.querySelectorAll('input[type=number], input[type=text]').forEach(el => {
+    el.classList.add('mac-input');
+    el.removeAttribute('class');
+    el.className = 'mac-input';
+  });
+
+  // Clock
+  function tick() {
+    const now = new Date();
+    const h = now.getHours(), m = String(now.getMinutes()).padStart(2,'0');
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    document.getElementById('clock').textContent = `${h%12||12}:${m} ${ampm}`;
+  }
+  tick();
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>
