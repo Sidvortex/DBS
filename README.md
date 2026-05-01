@@ -62,9 +62,11 @@ This is a **Minor Project** submitted as part of the academic curriculum for:
 ## 📂 Project Structure
 
 ```
-DBS/
+DPS/
 ├── manage.py
 ├── db.sqlite3
+├── screenshots/                  # UI snapshots
+├── docs/                         # synopsis, ppt & documentations
 ├── diabetes_project/
 │   ├── settings.py
 │   ├── urls.py
@@ -90,7 +92,7 @@ DBS/
 
 **1. Clone the repository**
 ```bash
-git clone https://github.com/Sidvortex/DBS.git
+git clone https://github.com/Sidvortex/DPS.git
 cd DBS
 ```
 
