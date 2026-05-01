@@ -40,6 +40,14 @@ This is a **Minor Project** submitted as part of the academic curriculum for:
 
 ---
 
+## 🖼️ UI Snapshots
+
+| Dashboard | Prediction Form | Result |
+|---|---|---|
+| ![Dashboard](screenshots/dashboard.png) | ![Form](screenshots/form.png) | ![Result](screenshots/result.png) |
+
+---
+
 ## 🛠️ Tech Stack
 
 - **Backend:** Python, Django
