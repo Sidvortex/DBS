@@ -93,7 +93,7 @@ DPS/
 **1. Clone the repository**
 ```bash
 git clone https://github.com/Sidvortex/DPS.git
-cd DBS
+cd DPS
 ```
 
 **2. Create and activate a virtual environment**
