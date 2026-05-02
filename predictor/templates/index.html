@@ -1,715 +1,320 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="day">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Diabetes Prediction System</title>
-  <link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
-  <style>
-    /* ════════════════════════════════════════════
-       MAC OS SYSTEM 7/8 — DAY + NIGHT THEMES
-    ════════════════════════════════════════════ */
-    [data-theme="day"] {
-      --bg:           #c8c0b0;
-      --bg-grid:      rgba(0,0,0,.035);
-      --window-bg:    #f0ece0;
-      --chrome:       #d4ccbc;
-      --text:         #1a1008;
-      --text-mid:     #4a3828;
-      --text-light:   #7a6858;
-      --border-dark:  #5a4838;
-      --border-mid:   #9a8878;
-      --border-light: #e0d8c8;
-      --btn-face:     #d8d0c0;
-      --btn-hi:       #f0ece4;
-      --btn-shadow:   #706050;
-      --bar-from:     #a09080;
-      --bar-to:       #7a6858;
-      --bar-mid:      #8a7868;
-      --bar-txt:      #f0ece0;
-      --bar-inactive-from: #c8c0b0;
-      --bar-inactive-to:   #b0a898;
-      --accent:       #2a5a8b;
-      --green:        #2a6a2a;
-      --red:          #8b1a1a;
-      --amber:        #7a5a10;
-      --selection:    #000080;
-      --sel-text:     #ffffff;
-      --statusbar-bg: #c0b8a8;
-      --input-bg:     #ffffff;
-      --row-alt:      #e8e0d0;
-      --row-hover:    #d0d0f0;
-      --taskbar-bg:   linear-gradient(180deg,#d8d0c0,#c0b8a8);
-      --modal-overlay:rgba(90,72,56,.55);
-      --modal-glass:  rgba(240,236,224,.92);
-      --boot-bg:      #c8c8c8;
-      --boot-text:    #1a1008;
-    }
-    [data-theme="night"] {
-      --bg:           #1a1410;
-      --bg-grid:      rgba(255,255,255,.025);
-      --window-bg:    #28201a;
-      --chrome:       #322820;
-      --text:         #e8dcc8;
-      --text-mid:     #b8a898;
-      --text-light:   #8a7868;
-      --border-dark:  #6a5848;
-      --border-mid:   #5a4838;
-      --border-light: #3a3028;
-      --btn-face:     #4a4030;
-      --btn-hi:       #5a5040;
-      --btn-shadow:   #201808;
-      --bar-from:     #3a3028;
-      --bar-to:       #2a2018;
-      --bar-mid:      #322820;
-      --bar-txt:      #c8b898;
-      --bar-inactive-from: #282018;
-      --bar-inactive-to:   #201810;
-      --accent:       #5a8abc;
-      --green:        #4a9a4a;
-      --red:          #b85050;
-      --amber:        #b89040;
-      --selection:    #1a2a6a;
-      --sel-text:     #e8dcc8;
-      --statusbar-bg: #201810;
-      --input-bg:     #1a1208;
-      --row-alt:      #322820;
-      --row-hover:    #2a3050;
-      --taskbar-bg:   linear-gradient(180deg,#282018,#201810);
-      --modal-overlay:rgba(10,8,4,.75);
-      --modal-glass:  rgba(28,22,14,.95);
-      --boot-bg:      #0a0a0a;
-      --boot-text:    #e8dcc8;
-    }
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>MediSystem — Disease Prediction</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+[data-theme="day"]{
+  --bg:#c8c0b0;--bg-grid:rgba(0,0,0,.035);--win:#f0ece0;--chrome:#d4ccbc;
+  --text:#1a1008;--text-mid:#4a3828;--text-dim:#7a6858;
+  --bd:#5a4838;--bdm:#9a8878;--bdl:#e0d8c8;
+  --bf:#d8d0c0;--bhi:#f0ece4;--bsh:#706050;
+  --bar0:#a09080;--bar1:#7a6858;--bar2:#8a7868;--bart:#f0ece0;
+  --bari0:#c8c0b0;--bari1:#b0a898;
+  --acc:#2a5a8b;--grn:#2a6a2a;--red:#8b1a1a;--amb:#7a5a10;
+  --sel:#000080;--selt:#fff;
+  --sb:#c0b8a8;--inp:#fff;--ralt:#e8e0d0;--rhov:#d0d0f0;
+  --tb:linear-gradient(180deg,#d8d0c0,#c0b8a8);
+  --mo:rgba(90,72,56,.55);--mg:rgba(240,236,224,.94);
+  --boot:#c8c8c8;--boott:#1a1008;
+}
+[data-theme="night"]{
+  --bg:#1a1410;--bg-grid:rgba(255,255,255,.025);--win:#28201a;--chrome:#322820;
+  --text:#e8dcc8;--text-mid:#b8a898;--text-dim:#8a7868;
+  --bd:#6a5848;--bdm:#5a4838;--bdl:#3a3028;
+  --bf:#4a4030;--bhi:#5a5040;--bsh:#201808;
+  --bar0:#3a3028;--bar1:#2a2018;--bar2:#322820;--bart:#c8b898;
+  --bari0:#282018;--bari1:#201810;
+  --acc:#5a8abc;--grn:#4a9a4a;--red:#b85050;--amb:#b89040;
+  --sel:#1a2a6a;--selt:#e8dcc8;
+  --sb:#201810;--inp:#1a1208;--ralt:#322820;--rhov:#2a3050;
+  --tb:linear-gradient(180deg,#282018,#201810);
+  --mo:rgba(10,8,4,.78);--mg:rgba(28,22,14,.96);
+  --boot:#0a0a0a;--boott:#e8dcc8;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{overflow-x:hidden}
+body{background:var(--bg);background-image:repeating-linear-gradient(0deg,transparent,transparent 1px,var(--bg-grid) 1px,var(--bg-grid) 2px),repeating-linear-gradient(90deg,transparent,transparent 1px,var(--bg-grid) 1px,var(--bg-grid) 2px);background-size:8px 8px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:var(--text);min-height:100vh;padding-bottom:36px;transition:background-color .4s,color .4s}
 
-    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
-    html { overflow-x: hidden; }
-    body {
-      background-color: var(--bg);
-      background-image:
-        repeating-linear-gradient(0deg,   transparent,transparent 1px,var(--bg-grid) 1px,var(--bg-grid) 2px),
-        repeating-linear-gradient(90deg,  transparent,transparent 1px,var(--bg-grid) 1px,var(--bg-grid) 2px);
-      background-size: 8px 8px;
-      font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 13px; color: var(--text);
-      min-height: 100vh;
-      padding-bottom: 36px;
-      transition: background-color .4s, color .4s;
-    }
+/* BOOT */
+#boot{position:fixed;inset:0;z-index:9999;background:var(--boot);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .8s ease}
+#boot.fade-out{opacity:0;pointer-events:none}
+#boot.gone{display:none}
+.boot-icon{width:60px;height:60px;border:3px solid var(--boott);border-radius:10px;overflow:hidden;box-shadow:4px 4px 0 var(--boott)}
+.boot-screen{background:#e8e8e8;flex:1;display:flex;align-items:center;justify-content:center;font-size:20px}
+.boot-bar-outer{height:10px;background:var(--boott)}
+.boot-title{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--boott);letter-spacing:1px}
+.boot-sub{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase}
+.boot-prog-wrap{width:190px;height:15px;border:2px solid var(--boott);overflow:hidden}
+.boot-prog-fill{height:100%;background:var(--boott);width:0%;transition:width .1s linear}
+.boot-status{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#888;height:13px}
 
-    /* ── BOOT SCREEN ──────────────────────────── */
-    #boot {
-      position: fixed; inset: 0; z-index: 9999;
-      background: var(--boot-bg);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 20px;
-      transition: opacity .8s ease;
-    }
-    #boot.fade-out { opacity: 0; pointer-events: none; }
-    #boot.gone     { display: none; }
+/* MENUBAR */
+.menubar{background:linear-gradient(180deg,var(--bhi),var(--bf));border-bottom:2px solid var(--bd);height:22px;display:flex;align-items:center;padding:0 6px;position:sticky;top:0;z-index:200;user-select:none}
+.menubar-apple{font-size:15px;font-weight:900;padding:0 9px;height:100%;display:flex;align-items:center;cursor:pointer;border-right:1px solid var(--bdm);margin-right:2px;position:relative;color:var(--text)}
+.menubar-apple:hover,.menu-item:hover{background:var(--sel);color:var(--selt)}
+.menu-item{padding:0 10px;height:100%;display:flex;align-items:center;cursor:default;font-size:13px;font-weight:500;white-space:nowrap;color:var(--text)}
+.mbr{margin-left:auto;display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-mid);padding-right:4px}
+.mbsep{color:var(--bdm)}
+.amd{display:none;position:absolute;top:22px;left:0;background:linear-gradient(180deg,var(--bhi),var(--bf));border:2px solid var(--bd);box-shadow:3px 3px 0 rgba(0,0,0,.3);min-width:200px;z-index:500}
+.amd.open{display:block}
+.amd-item{padding:4px 18px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;color:var(--text);font-family:'IBM Plex Sans',sans-serif}
+.amd-item:hover{background:var(--sel);color:var(--selt)}
+.amd-sep{height:0;border:none;border-top:1px solid var(--bdm);border-bottom:1px solid var(--bdl);margin:3px 0}
+.night-btn{border:1.5px solid var(--bdm);background:linear-gradient(180deg,var(--bhi),var(--bf));padding:0 7px;height:17px;cursor:pointer;font-size:12px;display:flex;align-items:center;box-shadow:inset 1px 1px 0 rgba(255,255,255,.4);color:var(--text)}
+.night-btn:active{transform:translate(1px,1px)}
 
-    .boot-mac-icon {
-      width: 64px; height: 64px;
-      border: 3px solid var(--boot-text);
-      border-radius: 10px;
-      background: var(--boot-bg);
-      display: flex; flex-direction: column;
-      overflow: hidden;
-      box-shadow: 4px 4px 0 var(--boot-text);
-    }
-    .boot-mac-screen {
-      background: #e8e8e8;
-      flex: 1; display: flex; align-items: center;
-      justify-content: center; font-size: 22px;
-    }
-    .boot-mac-bar {
-      background: var(--boot-text);
-      height: 10px; display: flex; align-items: center;
-      padding: 0 4px; gap: 3px;
-    }
-    .boot-mac-dot { width: 5px; height: 5px; border-radius: 50%; background: #888; }
+/* WINDOW */
+.desktop{padding:12px;display:flex;flex-direction:column;gap:12px;max-width:1200px;margin:0 auto;width:100%}
+.window{background:var(--win);border:2px solid var(--bd);box-shadow:inset 1px 1px 0 var(--bhi),inset -1px -1px 0 var(--bsh),3px 3px 0 rgba(0,0,0,.35);width:100%;transition:background .4s}
+.titlebar{background:linear-gradient(180deg,var(--bar0),var(--bar1) 45%,var(--bar2));padding:3px 7px;display:flex;align-items:center;gap:5px;border-bottom:2px solid var(--bd);min-height:21px;position:relative;overflow:hidden}
+.titlebar::after{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(180deg,transparent 0,transparent 1px,rgba(0,0,0,.11) 1px,rgba(0,0,0,.11) 2px);pointer-events:none}
+.titlebar.inactive{background:linear-gradient(180deg,var(--bari0),var(--bari1))}
+.wg{display:flex;gap:3px;position:relative;z-index:1}
+.wc{width:13px;height:13px;border:1.5px solid var(--bd);background:linear-gradient(145deg,var(--bhi),var(--bf) 60%,#b0a898);box-shadow:inset 1px 1px 0 rgba(255,255,255,.4),1px 1px 0 rgba(0,0,0,.22);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:var(--bd);cursor:pointer;flex-shrink:0}
+.wc:active{transform:translate(1px,1px);box-shadow:none;background:var(--bsh)}
+.wt{flex:1;text-align:center;font-size:11px;font-weight:600;color:var(--bart);text-shadow:0 -1px 0 rgba(0,0,0,.45);letter-spacing:.3px;position:relative;z-index:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wsp{width:29px;flex-shrink:0}
+.wbody{padding:12px}
+.wscroll{overflow-x:auto}
+.sbar{background:var(--sb);border-top:2px solid var(--bd);padding:2px 10px;font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text-mid);display:flex;justify-content:space-between;white-space:nowrap;overflow:hidden}
 
-    .boot-title {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 14px; color: var(--boot-text);
-      letter-spacing: 1px;
-    }
-    .boot-sub {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px; color: #888;
-      letter-spacing: 2px; text-transform: uppercase;
-    }
-    .boot-bar-wrap {
-      width: 200px; height: 16px;
-      border: 2px solid var(--boot-text);
-      background: var(--boot-bg);
-      overflow: hidden;
-    }
-    .boot-bar-fill {
-      height: 100%;
-      background: var(--boot-text);
-      width: 0%;
-      transition: width .1s linear;
-    }
-    .boot-status {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 10px; color: #888;
-      height: 14px;
-    }
+/* DISEASE SELECTOR */
+.disease-sel{display:flex;gap:0;border:2px solid var(--bd);background:var(--inp);width:fit-content;margin:0 auto 4px;box-shadow:inset 2px 2px 3px rgba(0,0,0,.1)}
+.ds-btn{padding:5px 24px;font-size:13px;font-weight:600;font-family:'IBM Plex Sans',sans-serif;cursor:pointer;border:none;background:transparent;color:var(--text-mid);border-right:2px solid var(--bd);outline:none;transition:background .15s}
+.ds-btn:last-child{border-right:none}
+.ds-btn.active{background:var(--sel);color:var(--selt)}
+.ds-btn:not(.active):hover{background:var(--ralt)}
 
-    /* ── MENU BAR ─────────────────────────────── */
-    .menubar {
-      background: linear-gradient(180deg, var(--btn-hi) 0%, var(--btn-face) 100%);
-      border-bottom: 2px solid var(--border-dark);
-      height: 22px; display: flex; align-items: center;
-      padding: 0 6px; position: sticky; top: 0; z-index: 200;
-      user-select: none; box-shadow: 0 1px 0 var(--border-light);
-    }
-    .menubar-apple {
-      font-size: 15px; font-weight: 900;
-      padding: 0 9px; height: 100%;
-      display: flex; align-items: center;
-      cursor: pointer; border-right: 1px solid var(--border-mid);
-      margin-right: 2px; position: relative;
-      color: var(--text);
-    }
-    .menubar-apple:hover, .menu-item:hover { background: var(--selection); color: var(--sel-text); }
-    .menu-item {
-      padding: 0 10px; height: 100%;
-      display: flex; align-items: center;
-      cursor: default; font-size: 13px; font-weight: 500;
-      white-space: nowrap; color: var(--text);
-    }
-    .menubar-right {
-      margin-left: auto; display: flex; align-items: center;
-      gap: 8px; font-family: 'IBM Plex Mono',monospace;
-      font-size: 11px; color: var(--text-mid); padding-right: 4px;
-    }
-    .menubar-sep { color: var(--border-mid); }
+/* STATS */
+.stat-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media(max-width:700px){.stat-row{grid-template-columns:repeat(3,1fr)}}
+.stat-box{background:var(--win);border:2px solid var(--bd);box-shadow:inset 1px 1px 0 var(--bhi),inset -1px -1px 0 var(--bsh),2px 2px 0 rgba(0,0,0,.2);padding:9px 8px;text-align:center}
+.stat-num{font-family:'VT323',monospace;font-size:30px;line-height:1}
+.stat-lbl{font-size:9px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);margin-top:1px}
 
-    /* Apple dropdown */
-    .apple-menu-dropdown {
-      display: none; position: absolute;
-      top: 22px; left: 0;
-      background: linear-gradient(180deg, var(--btn-hi), var(--btn-face));
-      border: 2px solid var(--border-dark);
-      box-shadow: 3px 3px 0 rgba(0,0,0,.3);
-      min-width: 200px; z-index: 500;
-    }
-    .apple-menu-dropdown.open { display: block; }
-    .amd-item {
-      padding: 4px 18px; font-size: 13px; font-weight: 500;
-      cursor: pointer; white-space: nowrap; color: var(--text);
-      font-family: 'IBM Plex Sans', sans-serif;
-    }
-    .amd-item:hover { background: var(--selection); color: var(--sel-text); }
-    .amd-sep {
-      height: 0; border: none;
-      border-top: 1px solid var(--border-mid);
-      border-bottom: 1px solid var(--border-light);
-      margin: 3px 0;
-    }
-    .amd-item.checked::before { content: '✓ '; }
+/* MAIN LAYOUT */
+.main-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:740px){.main-cols{grid-template-columns:1fr}}
+.right-col{display:flex;flex-direction:column;gap:12px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media(max-width:480px){.form-grid{grid-template-columns:1fr}}
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.chart-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:900px){.chart-row{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.chart-row,.bottom-grid{grid-template-columns:1fr}}
 
-    /* Night mode toggle */
-    .night-btn {
-      border: 1.5px solid var(--border-mid);
-      background: linear-gradient(180deg, var(--btn-hi), var(--btn-face));
-      padding: 0 7px; height: 17px; cursor: pointer;
-      font-size: 12px; display: flex; align-items: center;
-      box-shadow: inset 1px 1px 0 rgba(255,255,255,.4), 1px 1px 0 rgba(0,0,0,.15);
-      color: var(--text);
-    }
-    .night-btn:active { transform: translate(1px,1px); box-shadow: none; }
+/* FORM */
+.field-wrap{display:flex;flex-direction:column;gap:2px}
+.field-label{font-size:12px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:5px}
+.indicator{width:8px;height:8px;border-radius:50%;flex-shrink:0;border:1px solid var(--bd)}
+.ind-ok{background:var(--grn)}
+.ind-warn{background:var(--amb)}
+.ind-danger{background:var(--red)}
+.ind-neutral{background:var(--bdm)}
+.field-hint{font-size:10px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;line-height:1.3}
+.field-error{font-size:10px;color:var(--red);font-family:'IBM Plex Mono',monospace}
+.mac-input,.mac-select{width:100%;background:var(--inp);border:2px solid var(--bd);box-shadow:inset 2px 2px 3px rgba(0,0,0,.12),inset -1px -1px 0 var(--bdl);padding:4px 7px;font-size:13px;font-family:'IBM Plex Mono',monospace;color:var(--text);outline:none;transition:background .4s,color .4s}
+.mac-input{appearance:none;-webkit-appearance:none;-moz-appearance:textfield}
+.mac-input::-webkit-outer-spin-button,.mac-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.mac-input:focus,.mac-select:focus{border-color:var(--sel);box-shadow:inset 2px 2px 3px rgba(0,0,0,.15),0 0 0 1px var(--sel)}
+.mac-select{cursor:pointer;border-radius:0}
+.mac-hr{height:0;border:none;border-top:1px solid var(--bdm);border-bottom:1px solid var(--bdl);margin:11px 0}
+.btn-row{display:flex;justify-content:flex-end;gap:8px}
+.mac-btn{background:linear-gradient(180deg,var(--bhi) 0%,var(--bf) 45%,var(--chrome) 100%);border:2px solid var(--bd);box-shadow:inset 1px 1px 0 rgba(255,255,255,.6),inset -1px -1px 0 var(--bsh),2px 2px 0 var(--bd),3px 3px 0 rgba(0,0,0,.18);padding:5px 20px;font-size:13px;font-family:'IBM Plex Sans',sans-serif;font-weight:600;color:var(--text);cursor:pointer;outline:none}
+.mac-btn.default{border-width:3px;border-color:var(--text)}
+.mac-btn:active{background:linear-gradient(180deg,var(--bsh) 0%,var(--bf) 60%,var(--bhi) 100%);box-shadow:inset 2px 2px 4px rgba(0,0,0,.2),1px 1px 0 var(--bd);transform:translate(2px,2px)}
 
-    /* ── DESKTOP ──────────────────────────────── */
-    .desktop {
-      padding: 12px; display: flex; flex-direction: column; gap: 12px;
-      max-width: 1140px; margin: 0 auto; width: 100%;
-    }
+/* RESULT */
+.res-box{border:2px solid var(--bd);box-shadow:inset 1px 1px 0 var(--bhi),inset -1px -1px 0 var(--bsh);padding:13px}
+.res-icon-row{display:flex;align-items:flex-start;gap:11px}
+.res-icon{width:42px;height:42px;flex-shrink:0;border:2px solid var(--bd);box-shadow:2px 2px 0 var(--bd);display:flex;align-items:center;justify-content:center;font-size:20px}
+.res-icon.danger{background:#604030}.res-icon.success{background:#304830}.res-icon.warning{background:#605030}
+.res-name{font-family:'VT323',monospace;font-size:28px;line-height:1}
+.res-name.danger{color:var(--red)}.res-name.success{color:var(--grn)}.res-name.warning{color:var(--amb)}
+.chip{display:inline-block;border:2px solid var(--bd);box-shadow:1px 1px 0 var(--bd);padding:1px 8px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-top:3px}
+.chip.High{background:#604030;color:var(--red)}.chip.Moderate{background:#605030;color:var(--amb)}.chip.Low{background:#304830;color:var(--grn)}
+.prog-wrap{margin:9px 0 3px}
+.prog-lbl{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;display:flex;justify-content:space-between}
+.prog-track{height:12px;background:var(--inp);border:2px solid var(--bd);box-shadow:inset 2px 2px 3px rgba(0,0,0,.12);overflow:hidden}
+.prog-fill{height:100%}
+.prog-fill.danger{background:repeating-linear-gradient(45deg,var(--red) 0,var(--red) 5px,#b04040 5px,#b04040 10px)}
+.prog-fill.success{background:repeating-linear-gradient(45deg,var(--grn) 0,var(--grn) 5px,#3a8a3a 5px,#3a8a3a 10px)}
+.prog-fill.warning{background:repeating-linear-gradient(45deg,var(--amb) 0,var(--amb) 5px,#9a7020 5px,#9a7020 10px)}
+.res-note{font-size:10px;font-style:italic;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-top:8px;line-height:1.4}
+.empty-pane{padding:26px 12px;text-align:center;color:var(--text-dim)}
+.empty-pane .big{font-family:'VT323',monospace;font-size:44px;display:block;color:var(--bdm);line-height:1;margin-bottom:5px}
+.empty-pane p{font-family:'IBM Plex Mono',monospace;font-size:11px;line-height:1.5}
 
-    /* ── WINDOW ───────────────────────────────── */
-    .window {
-      background: var(--window-bg);
-      border: 2px solid var(--border-dark);
-      box-shadow: inset 1px 1px 0 var(--btn-hi), inset -1px -1px 0 var(--btn-shadow),
-                  3px 3px 0 rgba(0,0,0,.35);
-      width: 100%;
-      transition: background .4s;
-    }
-    .window-titlebar {
-      background: linear-gradient(180deg, var(--bar-from) 0%, var(--bar-to) 45%, var(--bar-mid) 100%);
-      padding: 3px 7px; display: flex; align-items: center; gap: 5px;
-      border-bottom: 2px solid var(--border-dark); min-height: 21px;
-      position: relative; overflow: hidden;
-    }
-    .window-titlebar::after {
-      content:''; position:absolute; inset:0;
-      background-image: repeating-linear-gradient(180deg, transparent 0, transparent 1px, rgba(0,0,0,.11) 1px, rgba(0,0,0,.11) 2px);
-      pointer-events:none;
-    }
-    .window-titlebar.inactive {
-      background: linear-gradient(180deg, var(--bar-inactive-from), var(--bar-inactive-to));
-    }
-    .wctrl-group { display:flex; gap:3px; position:relative; z-index:1; }
-    .wctrl {
-      width:13px; height:13px;
-      border:1.5px solid var(--border-dark);
-      background: linear-gradient(145deg, var(--btn-hi) 0%, var(--btn-face) 60%, #b0a898 100%);
-      box-shadow: inset 1px 1px 0 rgba(255,255,255,.4), 1px 1px 0 rgba(0,0,0,.22);
-      display:flex; align-items:center; justify-content:center;
-      font-size:8px; font-weight:900; color:var(--border-dark);
-      cursor:pointer; flex-shrink:0;
-    }
-    .wctrl:active { transform:translate(1px,1px); box-shadow:none; background:var(--btn-shadow); }
-    .win-title {
-      flex:1; text-align:center; font-size:11px; font-weight:600;
-      color:var(--bar-txt); text-shadow:0 -1px 0 rgba(0,0,0,.45);
-      letter-spacing:.3px; position:relative; z-index:1;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    }
-    .win-title-spacer { width:29px; flex-shrink:0; }
-    .window-body   { padding:12px; }
-    .window-scroll { overflow-x:auto; }
-    .statusbar {
-      background:var(--statusbar-bg);
-      border-top:2px solid var(--border-dark);
-      padding:2px 10px; font-size:10px;
-      font-family:'IBM Plex Mono',monospace; color:var(--text-mid);
-      display:flex; justify-content:space-between;
-      white-space:nowrap; overflow:hidden;
-    }
+/* INDICATOR LEGEND */
+.ind-row{display:flex;gap:12px;margin-top:9px;padding-top:8px;border-top:1px dashed var(--bdm);flex-wrap:wrap}
+.ind-item{display:flex;align-items:center;gap:4px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-mid)}
 
-    /* ── STATS ────────────────────────────────── */
-    .stat-row { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
-    @media(max-width:600px){ .stat-row{grid-template-columns:repeat(2,1fr);} }
-    .stat-box {
-      background:var(--window-bg); border:2px solid var(--border-dark);
-      box-shadow:inset 1px 1px 0 var(--btn-hi),inset -1px -1px 0 var(--btn-shadow),2px 2px 0 rgba(0,0,0,.2);
-      padding:10px 10px 8px; text-align:center;
-    }
-    .stat-num { font-family:'VT323',monospace; font-size:34px; line-height:1; }
-    .stat-lbl { font-size:10px; font-family:'IBM Plex Mono',monospace; text-transform:uppercase; letter-spacing:.6px; color:var(--text-light); margin-top:2px; }
+/* TABLES */
+.mac-table{width:100%;border-collapse:collapse;font-size:11px;min-width:360px}
+.mac-table thead tr{background:var(--sb)}
+.mac-table th{padding:5px 8px;border:1px solid var(--bd);font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--text-mid);text-align:left;white-space:nowrap}
+.mac-table td{padding:3px 8px;border:1px solid var(--bdm);font-family:'IBM Plex Mono',monospace;color:var(--text);white-space:nowrap}
+.mac-table tbody tr:nth-child(even){background:var(--ralt)}
+.mac-table tbody tr:hover{background:var(--rhov)}
+.tag-d{color:var(--red);font-weight:700}.tag-n{color:var(--grn);font-weight:700}
 
-    /* ── LAYOUT ───────────────────────────────── */
-    .main-cols { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    @media(max-width:700px){ .main-cols{grid-template-columns:1fr;} }
-    .right-col { display:flex; flex-direction:column; gap:12px; }
-    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-    @media(max-width:480px){ .form-grid{grid-template-columns:1fr;} }
-    .bottom-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    @media(max-width:820px){ .bottom-grid{grid-template-columns:1fr;} }
+/* CHARTS */
+.chart-canvas-wrap{padding:10px;position:relative;height:180px}
+canvas{max-height:160px}
 
-    /* ── FORM FIELDS ──────────────────────────── */
-    .field-wrap  { display:flex; flex-direction:column; gap:2px; }
-    .field-label { font-size:12px; font-weight:600; color:var(--text); }
-    .field-hint  { font-size:10px; color:var(--text-light); font-family:'IBM Plex Mono',monospace; line-height:1.3; }
-    .field-error { font-size:10px; color:var(--red); font-family:'IBM Plex Mono',monospace; }
-    .mac-input {
-      width:100%; background:var(--input-bg);
-      border:2px solid var(--border-dark);
-      box-shadow:inset 2px 2px 3px rgba(0,0,0,.12),inset -1px -1px 0 var(--border-light);
-      padding:4px 7px; font-size:13px;
-      font-family:'IBM Plex Mono',monospace; color:var(--text); outline:none;
-      appearance:none; -webkit-appearance:none; -moz-appearance:textfield;
-      transition:background .4s, color .4s;
-    }
-    .mac-input::-webkit-outer-spin-button,
-    .mac-input::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
-    .mac-input:focus { border-color:var(--selection); box-shadow:inset 2px 2px 3px rgba(0,0,0,.15),0 0 0 1px var(--selection); }
-    .mac-hr { height:0; border:none; border-top:1px solid var(--border-mid); border-bottom:1px solid var(--border-light); margin:12px 0; }
+/* TASKBAR */
+.taskbar{position:fixed;bottom:0;left:0;right:0;height:28px;background:var(--tb);border-top:2px solid var(--bd);display:flex;align-items:center;padding:0 8px;gap:6px;z-index:300;user-select:none}
+.tb-app{background:linear-gradient(180deg,var(--bhi),var(--bf));border:2px solid var(--bd);box-shadow:inset 1px 1px 0 rgba(255,255,255,.4),1px 1px 0 rgba(0,0,0,.18);padding:1px 10px;font-size:11px;font-weight:600;cursor:default;display:flex;align-items:center;gap:4px;color:var(--text)}
+.tb-sep{width:1px;height:18px;background:linear-gradient(180deg,transparent,var(--bdm),transparent);margin:0 2px}
+.tb-right{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-mid);display:flex;align-items:center;gap:8px}
+.tb-clock{border:2px solid var(--bdm);background:var(--inp);box-shadow:inset 1px 1px 2px rgba(0,0,0,.1);padding:0 7px;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--text);height:20px;display:flex;align-items:center}
 
-    /* ── BUTTONS ──────────────────────────────── */
-    .btn-row { display:flex; justify-content:flex-end; gap:8px; }
-    .mac-btn {
-      background:linear-gradient(180deg, var(--btn-hi) 0%, var(--btn-face) 45%, var(--chrome) 100%);
-      border:2px solid var(--border-dark);
-      box-shadow:inset 1px 1px 0 rgba(255,255,255,.6),inset -1px -1px 0 var(--btn-shadow),
-                 2px 2px 0 var(--border-dark),3px 3px 0 rgba(0,0,0,.18);
-      padding:5px 22px; font-size:13px;
-      font-family:'IBM Plex Sans',sans-serif; font-weight:600; color:var(--text);
-      cursor:pointer; outline:none; letter-spacing:.2px;
-    }
-    .mac-btn.default { border-width:3px; border-color:var(--text); }
-    .mac-btn:active {
-      background:linear-gradient(180deg, var(--btn-shadow) 0%, var(--btn-face) 60%, var(--btn-hi) 100%);
-      box-shadow:inset 2px 2px 4px rgba(0,0,0,.2),1px 1px 0 var(--border-dark);
-      transform:translate(2px,2px);
-    }
+/* TEAM MODAL */
+#team-modal{display:none;position:fixed;inset:0;z-index:800;background:var(--mo);align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+#team-modal.open{display:flex}
+.team-win{background:var(--mg);border:2px solid var(--bd);box-shadow:inset 1px 1px 0 var(--bhi),5px 5px 0 rgba(0,0,0,.4);width:min(920px,96vw);max-height:90vh;display:flex;flex-direction:column;animation:wdrop .25s cubic-bezier(.2,.8,.4,1)}
+@keyframes wdrop{from{transform:translateY(-16px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+.team-body{padding:16px;overflow-y:auto;flex:1}
+.team-hdr{text-align:center;padding:6px 0 14px;border-bottom:2px solid var(--bdm);margin-bottom:16px}
+.team-app-name{font-family:'VT323',monospace;font-size:26px;letter-spacing:1px;color:var(--text)}
+.team-app-sub{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+.members-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:660px){.members-grid{grid-template-columns:1fr}}
+.mcard{background:var(--win);border:2px solid var(--bd);box-shadow:inset 1px 1px 0 var(--bhi),2px 2px 0 rgba(0,0,0,.2)}
+.mcard-hdr{background:linear-gradient(180deg,var(--bar0),var(--bar1));padding:4px 8px;border-bottom:2px solid var(--bd);position:relative;overflow:hidden}
+.mcard-hdr::after{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(180deg,transparent 0,transparent 1px,rgba(0,0,0,.1) 1px,rgba(0,0,0,.1) 2px);pointer-events:none}
+.mcard-title{font-size:11px;font-weight:600;color:var(--bart);text-align:center;position:relative;z-index:1;letter-spacing:.3px}
+.mphoto-wrap{padding:10px 10px 5px;display:flex;justify-content:center}
+.mphoto-ph{width:76px;height:76px;border:3px solid var(--bd);box-shadow:2px 2px 0 var(--bd);background:repeating-linear-gradient(45deg,var(--sb) 0,var(--sb) 4px,var(--ralt) 4px,var(--ralt) 8px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.mphoto-ph span{font-size:20px}
+.mphoto-ph small{font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--text-dim);text-align:center;line-height:1.2}
+.minfo{padding:0 10px 10px}
+.mname{font-family:'VT323',monospace;font-size:21px;color:var(--text);line-height:1.1;margin-bottom:1px}
+.mrole{font-size:9px;font-weight:600;font-family:'IBM Plex Mono',monospace;color:var(--acc);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px}
+.rkey{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);border-bottom:1px dashed var(--bdm);margin-bottom:3px;padding-bottom:1px;margin-top:7px}
+.rval{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-mid);line-height:1.5}
+.skill-chips{display:flex;flex-wrap:wrap;gap:3px;margin-top:2px}
+.sk{background:var(--sb);border:1.5px solid var(--bdm);padding:1px 5px;font-size:8px;font-family:'IBM Plex Mono',monospace;color:var(--text-mid)}
+.img-hint{font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--text-dim);text-align:center;padding:0 8px 7px;line-height:1.4}
+.team-footer{padding:9px 16px;border-top:2px solid var(--bdm);display:flex;justify-content:flex-end;background:var(--sb)}
 
-    /* ── RESULT ───────────────────────────────── */
-    .result-box {
-      border:2px solid var(--border-dark);
-      box-shadow:inset 1px 1px 0 var(--btn-hi),inset -1px -1px 0 var(--btn-shadow);
-      padding:14px;
-    }
-    .result-icon-row { display:flex; align-items:flex-start; gap:12px; }
-    .result-icon {
-      width:44px; height:44px; flex-shrink:0;
-      border:2px solid var(--border-dark); box-shadow:2px 2px 0 var(--border-dark);
-      display:flex; align-items:center; justify-content:center; font-size:22px;
-    }
-    .result-icon.danger  { background:#604030; }
-    .result-icon.success { background:#304830; }
-    .result-icon.warning { background:#605030; }
-    .result-name { font-family:'VT323',monospace; font-size:30px; line-height:1; }
-    .result-name.danger  { color:var(--red); }
-    .result-name.success { color:var(--green); }
-    .result-name.warning { color:var(--amber); }
-    .risk-chip {
-      display:inline-block; border:2px solid var(--border-dark);
-      box-shadow:1px 1px 0 var(--border-dark); padding:1px 9px;
-      font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600;
-      text-transform:uppercase; letter-spacing:1px; margin-top:3px;
-    }
-    .risk-chip.High     { background:#604030; color:var(--red); }
-    .risk-chip.Moderate { background:#605030; color:var(--amber); }
-    .risk-chip.Low      { background:#304830; color:var(--green); }
-    .progress-wrap { margin:10px 0 3px; }
-    .progress-label { font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--text-light); text-transform:uppercase; letter-spacing:.5px; margin-bottom:3px; display:flex; justify-content:space-between; }
-    .progress-track { height:13px; background:var(--input-bg); border:2px solid var(--border-dark); box-shadow:inset 2px 2px 3px rgba(0,0,0,.12); overflow:hidden; }
-    .progress-fill.danger  { background:repeating-linear-gradient(45deg,var(--red) 0,var(--red) 5px,#b04040 5px,#b04040 10px); height:100%; }
-    .progress-fill.success { background:repeating-linear-gradient(45deg,var(--green) 0,var(--green) 5px,#3a8a3a 5px,#3a8a3a 10px); height:100%; }
-    .progress-fill.warning { background:repeating-linear-gradient(45deg,var(--amber) 0,var(--amber) 5px,#9a7020 5px,#9a7020 10px); height:100%; }
-    .result-note { font-size:11px; font-style:italic; color:var(--text-light); font-family:'IBM Plex Mono',monospace; margin-top:8px; line-height:1.4; }
-
-    .empty-pane { padding:28px 12px; text-align:center; color:var(--text-light); }
-    .empty-pane .big { font-family:'VT323',monospace; font-size:48px; display:block; color:var(--border-mid); line-height:1; margin-bottom:6px; }
-    .empty-pane p { font-family:'IBM Plex Mono',monospace; font-size:11px; line-height:1.5; }
-
-    /* ── TABLES ───────────────────────────────── */
-    .mac-table { width:100%; border-collapse:collapse; font-size:11px; min-width:400px; }
-    .mac-table thead tr { background:var(--statusbar-bg); }
-    .mac-table th { padding:5px 9px; border:1px solid var(--border-dark); font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.4px; color:var(--text-mid); text-align:left; white-space:nowrap; }
-    .mac-table td { padding:4px 9px; border:1px solid var(--border-mid); font-family:'IBM Plex Mono',monospace; color:var(--text); white-space:nowrap; }
-    .mac-table tbody tr:nth-child(even) { background:var(--row-alt); }
-    .mac-table tbody tr:hover { background:var(--row-hover); }
-    .tag-d { color:var(--red); font-weight:700; }
-    .tag-n { color:var(--green); font-weight:700; }
-
-    /* ── TASKBAR ──────────────────────────────── */
-    .taskbar {
-      position:fixed; bottom:0; left:0; right:0; height:28px;
-      background:var(--taskbar-bg); border-top:2px solid var(--border-dark);
-      display:flex; align-items:center; padding:0 8px; gap:6px;
-      z-index:300; user-select:none;
-    }
-    .taskbar-app {
-      background:linear-gradient(180deg,var(--btn-hi),var(--btn-face));
-      border:2px solid var(--border-dark);
-      box-shadow:inset 1px 1px 0 rgba(255,255,255,.4),1px 1px 0 rgba(0,0,0,.18);
-      padding:1px 11px; font-size:11px; font-weight:600; cursor:default;
-      display:flex; align-items:center; gap:5px; color:var(--text);
-    }
-    .taskbar-sep { width:1px; height:18px; background:linear-gradient(180deg,transparent,var(--border-mid),transparent); margin:0 2px; }
-    .taskbar-right { margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-mid); display:flex; align-items:center; gap:8px; }
-    .taskbar-clock { border:2px solid var(--border-mid); background:var(--input-bg); box-shadow:inset 1px 1px 2px rgba(0,0,0,.1); padding:0 8px; font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; color:var(--text); height:20px; display:flex; align-items:center; }
-
-    /* ════════════════════════════════════════════
-       TEAM MODAL
-    ════════════════════════════════════════════ */
-    #team-modal {
-      display:none; position:fixed; inset:0; z-index:800;
-      background:var(--modal-overlay);
-      align-items:center; justify-content:center;
-      backdrop-filter:blur(2px);
-      animation:fade-in .25s ease;
-    }
-    #team-modal.open { display:flex; }
-    @keyframes fade-in { from{opacity:0} to{opacity:1} }
-
-    .team-window {
-      background:var(--modal-glass);
-      border:2px solid var(--border-dark);
-      box-shadow:inset 1px 1px 0 var(--btn-hi),inset -1px -1px 0 var(--btn-shadow),
-                 5px 5px 0 rgba(0,0,0,.4);
-      width:min(920px,96vw);
-      max-height:90vh; display:flex; flex-direction:column;
-      animation:window-drop .25s cubic-bezier(.2,.8,.4,1);
-    }
-    @keyframes window-drop { from{transform:translateY(-18px) scale(.97);opacity:0} to{transform:none;opacity:1} }
-
-    .team-body { padding:18px; overflow-y:auto; flex:1; }
-
-    .team-header-row {
-      text-align:center; padding:8px 0 16px;
-      border-bottom:2px solid var(--border-mid); margin-bottom:18px;
-    }
-    .team-app-icon { font-size:36px; display:block; margin-bottom:6px; }
-    .team-app-name { font-family:'VT323',monospace; font-size:28px; letter-spacing:1px; color:var(--text); }
-    .team-app-sub  { font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--text-light); letter-spacing:2px; text-transform:uppercase; margin-top:2px; }
-
-    .members-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-    @media(max-width:680px){ .members-grid{grid-template-columns:1fr;} }
-
-    .member-card {
-      background:var(--window-bg);
-      border:2px solid var(--border-dark);
-      box-shadow:inset 1px 1px 0 var(--btn-hi),2px 2px 0 rgba(0,0,0,.2);
-    }
-    .member-card-header {
-      background:linear-gradient(180deg,var(--bar-from),var(--bar-to));
-      padding:4px 8px; border-bottom:2px solid var(--border-dark);
-      position:relative; overflow:hidden;
-    }
-    .member-card-header::after {
-      content:''; position:absolute; inset:0;
-      background-image:repeating-linear-gradient(180deg,transparent 0,transparent 1px,rgba(0,0,0,.1) 1px,rgba(0,0,0,.1) 2px);
-      pointer-events:none;
-    }
-    .member-card-title { font-size:11px; font-weight:600; color:var(--bar-txt); text-align:center; position:relative; z-index:1; letter-spacing:.3px; }
-
-    .member-photo-wrap {
-      padding:12px 12px 6px;
-      display:flex; justify-content:center;
-    }
-    .member-photo {
-      width:80px; height:80px;
-      border:3px solid var(--border-dark);
-      box-shadow:2px 2px 0 var(--border-dark);
-      object-fit:cover;
-      background:var(--statusbar-bg);
-      display:flex; align-items:center; justify-content:center;
-      font-size:32px; overflow:hidden;
-    }
-    /* if src is blank, show placeholder icon */
-    .member-photo-img { width:100%; height:100%; object-fit:cover; }
-    .member-photo-placeholder {
-      width:80px; height:80px;
-      border:3px solid var(--border-dark);
-      box-shadow:2px 2px 0 var(--border-dark);
-      background: repeating-linear-gradient(45deg, var(--statusbar-bg) 0, var(--statusbar-bg) 4px, var(--row-alt) 4px, var(--row-alt) 8px);
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      gap:3px; cursor:pointer;
-    }
-    .member-photo-placeholder span { font-size:22px; }
-    .member-photo-placeholder small { font-family:'IBM Plex Mono',monospace; font-size:8px; color:var(--text-light); text-align:center; line-height:1.2; }
-
-    .member-info { padding:0 12px 12px; }
-    .member-name { font-family:'VT323',monospace; font-size:22px; color:var(--text); line-height:1.1; margin-bottom:2px; }
-    .member-role { font-size:10px; font-weight:600; font-family:'IBM Plex Mono',monospace; color:var(--accent); text-transform:uppercase; letter-spacing:.8px; margin-bottom:8px; }
-
-    .resume-section { margin-top:8px; }
-    .resume-key {
-      font-family:'IBM Plex Mono',monospace; font-size:9px; font-weight:600;
-      text-transform:uppercase; letter-spacing:1px; color:var(--text-light);
-      border-bottom:1px dashed var(--border-mid); margin-bottom:4px; padding-bottom:2px;
-    }
-    .resume-val {
-      font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--text-mid);
-      line-height:1.6; margin-bottom:6px;
-    }
-    .skill-chips { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:6px; }
-    .skill-chip {
-      background:var(--statusbar-bg); border:1.5px solid var(--border-mid);
-      padding:1px 6px; font-size:9px;
-      font-family:'IBM Plex Mono',monospace; color:var(--text-mid);
-      letter-spacing:.3px;
-    }
-
-    .team-footer {
-      padding:10px 18px; border-top:2px solid var(--border-mid);
-      display:flex; justify-content:flex-end; gap:8px;
-      background:var(--statusbar-bg);
-    }
-
-    /* image upload hint */
-    .img-hint {
-      font-family:'IBM Plex Mono',monospace; font-size:8px;
-      color:var(--text-light); text-align:center; padding:0 8px 8px;
-      line-height:1.4;
-    }
-
-    /* scrollbar */
-    ::-webkit-scrollbar { width:14px; height:14px; }
-    ::-webkit-scrollbar-track { background:var(--chrome); border:1px solid var(--border-mid); }
-    ::-webkit-scrollbar-thumb { background:linear-gradient(180deg,var(--btn-hi),var(--btn-face),var(--btn-shadow)); border:1px solid var(--border-dark); }
-    ::-webkit-scrollbar-corner { background:var(--chrome); }
-  </style>
+::-webkit-scrollbar{width:14px;height:14px}
+::-webkit-scrollbar-track{background:var(--chrome);border:1px solid var(--bdm)}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--bhi),var(--bf),var(--bsh));border:1px solid var(--bd)}
+::-webkit-scrollbar-corner{background:var(--chrome)}
+</style>
 </head>
 <body>
 
-<!-- ════ BOOT SCREEN ════ -->
+<!-- BOOT -->
 <div id="boot">
-  <div class="boot-mac-icon">
-    <div class="boot-mac-screen">😄</div>
-    <div class="boot-mac-bar">
-      <div class="boot-mac-dot"></div>
-      <div class="boot-mac-dot"></div>
-      <div class="boot-mac-dot"></div>
-    </div>
+  <div class="boot-icon">
+    <div class="boot-screen">😄</div>
+    <div class="boot-bar-outer" style="height:10px"></div>
   </div>
-  <div class="boot-title">DiabetesPrediction.app</div>
-  <div class="boot-sub">System 8.1 — Maharishi University</div>
-  <div class="boot-bar-wrap"><div class="boot-bar-fill" id="boot-bar"></div></div>
-  <div class="boot-status" id="boot-status">Loading extensions...</div>
+  <div class="boot-title">MediSystem.app</div>
+  <div class="boot-sub">System 8.1 — MUIT Noida</div>
+  <div class="boot-prog-wrap"><div class="boot-prog-fill" id="bpf"></div></div>
+  <div class="boot-status" id="bst">Initializing...</div>
 </div>
 
-<!-- ════ TEAM MODAL ════ -->
+<!-- TEAM MODAL -->
 <div id="team-modal">
-  <div class="team-window">
-    <div class="window-titlebar">
-      <div class="wctrl-group">
-        <div class="wctrl" onclick="closeTeam()">&#9632;</div>
-        <div class="wctrl"></div>
-      </div>
-      <div class="win-title">&#128101; About This Team — DiabetesPrediction.app v1.0</div>
-      <div class="win-title-spacer"></div>
+  <div class="team-win">
+    <div class="titlebar">
+      <div class="wg"><div class="wc" onclick="closeTeam()">&#9632;</div><div class="wc"></div></div>
+      <div class="wt">&#128101; About the Team — MediSystem.app v2.0</div>
+      <div class="wsp"></div>
     </div>
-
     <div class="team-body">
-      <div class="team-header-row">
-        <span class="team-app-icon">&#128203;</span>
-        <div class="team-app-name">DIABETES PREDICTION SYSTEM</div>
+      <div class="team-hdr">
+        <div style="font-size:32px;margin-bottom:6px">&#128203;</div>
+        <div class="team-app-name">MEDISYSTEM — DISEASE PREDICTION</div>
         <div class="team-app-sub">B.Tech CSE-DS · MUIT Noida · Batch 2021–2025</div>
       </div>
-
       <div class="members-grid">
-
-        <!-- ── MEMBER 1: SIDDHARTH ── -->
-        <div class="member-card">
-          <div class="member-card-header"><div class="member-card-title">&#128100; Member Profile</div></div>
-          <div class="member-photo-wrap">
-            <!-- Replace the placeholder below with:
-                 <img class="member-photo-img" src="/static/images/siddharth.jpg" />
-                 Put your photo in: predictor/static/images/siddharth.jpg -->
-            <div class="member-photo-placeholder" title="Click to see image location">
-              <span>🧑‍💻</span>
-              <small>Add photo:<br/>siddharth.jpg</small>
-            </div>
+        <!-- SIDDHARTH -->
+        <div class="mcard">
+          <div class="mcard-hdr"><div class="mcard-title">&#128100; Member Profile</div></div>
+          <div class="mphoto-wrap">
+            <!-- To add photo: place siddharth.jpg in predictor/static/images/ then replace this div with:
+                 <img style="width:76px;height:76px;object-fit:cover;border:3px solid var(--bd)" src="/static/images/siddharth.jpg"/> -->
+            <div class="mphoto-ph"><span>🧑‍💻</span><small>siddharth.jpg</small></div>
           </div>
-          <div class="member-info">
-            <div class="member-name">Siddharth</div>
-            <div class="member-role">&#9679; Frontend dev · ML Engineer</div>
-
-            <div class="resume-section">
-              <div class="resume-key">Education</div>
-              <div class="resume-val">B.Tech — CSE (Data Science)<br/>MUIT, Noida | 2023–2027</div>
-            </div>
-            <div class="resume-section">
-              <div class="resume-key">Responsibilities</div>
-              <div class="resume-val">Django architecture, URL routing, ML model integration, database design, deployment, Model Trainig, UI/UX design </div>
-            </div>
-            <div class="resume-section">
-              <div class="resume-key">Tech Stack</div>
-              <div class="skill-chips">
-                <span class="skill-chip">Python</span>
-                <span class="skill-chip">Django</span>
-                <span class="skill-chip">Panda</span>
-                <span class="skill-chip">numpy</span>
-                <span class="skill-chip">matplotlib</span>
-                <span class="skill-chip">seaborn</span>
-                <span class="skill-chip">scikit-learn</span>
-                <span class="skill-chip">HTML/CSS templates</span>
-                <span class="skill-chip">SQLite</span>
-                <span class="skill-chip">Git</span>
-              </div>
-            </div>
-            <div class="resume-section">
-              <div class="resume-key">Interests</div>
-              <div class="resume-val">Robotics · Embedded Systems · AI/ML · Frontend Design · ML Training</div>
-            </div>
+          <div class="minfo">
+            <div class="mname">Siddharth</div>
+            <div class="mrole">&#9679; Backend · ML Integration · UI</div>
+            <div class="rkey">Education</div>
+            <div class="rval">B.Tech CSE-DS · MUIT Noida · 2021–2025</div>
+            <div class="rkey">Responsibilities</div>
+            <div class="rval">Django architecture, ML integration, database design, UI development, deployment</div>
+            <div class="rkey">Tech Stack</div>
+            <div class="skill-chips"><span class="sk">Python</span><span class="sk">Django</span><span class="sk">sklearn</span><span class="sk">SQLite</span><span class="sk">HTML/CSS</span><span class="sk">Git</span></div>
+            <div class="rkey">Interests</div>
+            <div class="rval">Robotics · Embedded Systems · AI/ML · Frontend Design</div>
           </div>
-          <div class="img-hint">&#128247; To add photo: place siddharth.jpg in static/images/ and update src in HTML</div>
+          <div class="img-hint">&#128247; Add photo: predictor/static/images/siddharth.jpg</div>
         </div>
-
-        <!-- ── MEMBER 2: ARPIT ── -->
-        <div class="member-card">
-          <div class="member-card-header"><div class="member-card-title">&#128100; Member Profile</div></div>
-          <div class="member-photo-wrap">
-            <div class="member-photo-placeholder" title="Add photo">
-              <span>🧑‍🔬</span>
-              <small>Add photo:<br/>arpit.jpg</small>
-            </div>
+        <!-- ARPIT -->
+        <div class="mcard">
+          <div class="mcard-hdr"><div class="mcard-title">&#128100; Member Profile</div></div>
+          <div class="mphoto-wrap">
+            <div class="mphoto-ph"><span>🧑‍🔬</span><small>arpit.jpg</small></div>
           </div>
-          <div class="member-info">
-            <div class="member-name">Arpit</div>
-            <div class="member-role">&#9679; Backend dev · Project Lead</div>
-
-            <div class="resume-section">
-              <div class="resume-key">Education</div>
-              <div class="resume-val">B.Tech — CSE (Data Science)<br/>MUIT, Noida | 2021–2025</div>
-            </div>
-            <div class="resume-section">
-              <div class="resume-key">Responsibilities</div>
-              <div class="resume-val">Dataset collection, model training (SVM/RF), evaluation, model serialization</div>
-            </div>
-            <div class="resume-section">
-              <div class="resume-key">Tech Stack</div>
-              <div class="skill-chips">
-                <span class="skill-chip">Python</span>
-                <span class="skill-chip">pandas</span>
-                <span class="skill-chip">NumPy</span>
-                <span class="skill-chip">sklearn</span>
-                <span class="skill-chip">Jupyter</span>
-              </div>
-            </div>
-            <div class="resume-section">
-              <div class="resume-key">Interests</div>
-              <div class="resume-val">Data Science · Statistical Modeling · Healthcare AI</div>
-            </div>
+          <div class="minfo">
+            <div class="mname">Arpit</div>
+            <div class="mrole">&#9679; Machine Learning · Data Analysis</div>
+            <div class="rkey">Education</div>
+            <div class="rval">B.Tech CSE-DS · MUIT Noida · 2021–2025</div>
+            <div class="rkey">Responsibilities</div>
+            <div class="rval">Dataset collection, preprocessing, SMOTE augmentation, model training and evaluation</div>
+            <div class="rkey">Tech Stack</div>
+            <div class="skill-chips"><span class="sk">Python</span><span class="sk">pandas</span><span class="sk">NumPy</span><span class="sk">sklearn</span><span class="sk">Jupyter</span></div>
+            <div class="rkey">Interests</div>
+            <div class="rval">Data Science · Statistical Modeling · Healthcare AI</div>
           </div>
-          <div class="img-hint">&#128247; To add photo: place arpit.jpg in static/images/ and update src in HTML</div>
+          <div class="img-hint">&#128247; Add photo: predictor/static/images/arpit.jpg</div>
         </div>
-
-        <!-- ── MEMBER 3: KANAK ── -->
-        <div class="member-card">
-          <div class="member-card-header"><div class="member-card-title">&#128100; Member Profile</div></div>
-          <div class="member-photo-wrap">
-            <div class="member-photo-placeholder" title="Add photo">
-              <span>🧑‍🎨</span>
-              <small>Add photo:<br/>kanak.jpg</small>
-            </div>
+        <!-- KANAK -->
+        <div class="mcard">
+          <div class="mcard-hdr"><div class="mcard-title">&#128100; Member Profile</div></div>
+          <div class="mphoto-wrap">
+            <div class="mphoto-ph"><span>🧑‍🎨</span><small>kanak.jpg</small></div>
           </div>
-          <div class="member-info">
-            <div class="member-name">Kanak</div>
-            <div class="member-role">&#9679; Data Analyst · Docs Lead</div>
-
-            <div class="resume-section">
-              <div class="resume-key">Education</div>
-              <div class="resume-val">B.Tech — CSE (Data Science)<br/>MUIT, Noida | 2021–2025</div>
-            </div>
-            <div class="resume-section">
-              <div class="resume-key">Responsibilities</div>
-              <div class="resume-val">Django forms, Data PreProcessing, synopsis documentation, QA testing</div>
-            </div>
-            <div class="resume-section">
-              <div class="resume-key">Tech Stack</div>
-              <div class="skill-chips">
-                <span class="skill-chip">HTML5</span>
-                <span class="skill-chip">CSS3</span>
-                <span class="skill-chip">Django Templates</span>
-                <span class="skill-chip">Bootstrap</span>
-              </div>
-            </div>
-            <div class="resume-section">
-              <div class="resume-key">Interests</div>
-              <div class="resume-val">Data Analysis · Web Development · Technical Writing</div>
-            </div>
+          <div class="minfo">
+            <div class="mname">Kanak</div>
+            <div class="mrole">&#9679; Frontend Development · Documentation</div>
+            <div class="rkey">Education</div>
+            <div class="rval">B.Tech CSE-DS · MUIT Noida · 2021–2025</div>
+            <div class="rkey">Responsibilities</div>
+            <div class="rval">HTML/CSS templates, Django forms, UI/UX design, synopsis documentation, QA testing</div>
+            <div class="rkey">Tech Stack</div>
+            <div class="skill-chips"><span class="sk">HTML5</span><span class="sk">CSS3</span><span class="sk">Bootstrap</span><span class="sk">Django Templates</span></div>
+            <div class="rkey">Interests</div>
+            <div class="rval">UI/UX Design · Web Development · Technical Writing</div>
           </div>
-          <div class="img-hint">&#128247; To add photo: place kanak.jpg in static/images/ and update src in HTML</div>
+          <div class="img-hint">&#128247; Add photo: predictor/static/images/kanak.jpg</div>
         </div>
-
-      </div><!-- /members-grid -->
-    </div><!-- /team-body -->
-
-    <div class="team-footer">
-      <button class="mac-btn" onclick="closeTeam()">Close</button>
+      </div>
     </div>
+    <div class="team-footer"><button class="mac-btn" onclick="closeTeam()">Close</button></div>
   </div>
 </div>
 
-<!-- ════ MENU BAR ════ -->
+<!-- MENUBAR -->
 <div class="menubar">
-  <div class="menubar-apple" id="apple-menu-btn" onclick="toggleAppleMenu()">
+  <div class="menubar-apple" id="amb" onclick="toggleAM()">
     &#63743;
-    <div class="apple-menu-dropdown" id="apple-dropdown">
+    <div class="amd" id="amd">
       <div class="amd-item" onclick="openTeam()">&#128101; About the Team...</div>
-      <div class="amd-item" onclick="aboutApp()">&#128203; About This App...</div>
+      <div class="amd-item" onclick="aboutApp()">&#128203; About MediSystem...</div>
       <div class="amd-sep"></div>
       <div class="amd-item" id="theme-item" onclick="toggleTheme()">&#9790; Switch to Night Mode</div>
       <div class="amd-sep"></div>
-      <div class="amd-item" onclick="window.location.reload()">&#128260; Restart App</div>
+      <div class="amd-item" onclick="window.location.reload()">&#128260; Restart</div>
     </div>
   </div>
   <div class="menu-item">File</div>
@@ -717,66 +322,110 @@
   <div class="menu-item">View</div>
   <div class="menu-item">Predict</div>
   <div class="menu-item">Help</div>
-  <div class="menubar-right">
-    <span>&#127968;</span>
-    <span class="menubar-sep">&#9670;</span>
-    <span>{{ model_name }}</span>
-    <span class="menubar-sep">&#9670;</span>
-    <span>{{ model_acc }}%</span>
-    <span class="menubar-sep">&#9670;</span>
-    <button class="night-btn" onclick="toggleTheme()" title="Toggle Day/Night Mode" id="night-btn-icon">&#9790;</button>
-    <span id="mbclock">--:-- --</span>
+  <div class="mbr">
+    <span>D:{{ diab_model }} {{ diab_acc }}%</span>
+    <span class="mbsep">&#9670;</span>
+    <span>H:{{ heart_model }} {{ heart_acc }}%</span>
+    <span class="mbsep">&#9670;</span>
+    <button class="night-btn" onclick="toggleTheme()" id="nbi">&#9790;</button>
+    <span id="mbc">--:-- --</span>
   </div>
 </div>
 
-<!-- ════ DESKTOP ════ -->
-<div class="desktop" id="main-desktop" style="opacity:0;transition:opacity .6s">
+<!-- DESKTOP -->
+<div class="desktop" id="desk" style="opacity:0;transition:opacity .6s">
+
+  <!-- DISEASE SELECTOR -->
+  <div style="display:flex;justify-content:center">
+    <form method="GET" id="dsf" style="display:inline">
+      <div class="disease-sel">
+        <button type="submit" name="disease" value="diabetes" class="ds-btn {% if disease == 'diabetes' %}active{% endif %}" id="btn-diab">&#128137; Diabetes</button>
+        <button type="submit" name="disease" value="heart"    class="ds-btn {% if disease == 'heart'    %}active{% endif %}" id="btn-heart">&#128148; Heart Disease</button>
+      </div>
+    </form>
+  </div>
 
   <!-- STATS WINDOW -->
   <div class="window">
-    <div class="window-titlebar">
-      <div class="wctrl-group"><div class="wctrl">&#9632;</div><div class="wctrl"></div></div>
-      <div class="win-title">&#128203; Diabetes Prediction System &#8212; DiabetesPrediction.app</div>
-      <div class="win-title-spacer"></div>
+    <div class="titlebar">
+      <div class="wg"><div class="wc">&#9632;</div><div class="wc"></div></div>
+      <div class="wt">&#128203; MediSystem — {% if disease == 'diabetes' %}Diabetes Analysis{% else %}Heart Disease Analysis{% endif %}</div>
+      <div class="wsp"></div>
     </div>
-    <div class="window-body" style="padding:10px;">
+    <div class="wbody" style="padding:10px">
+      {% if disease == 'diabetes' %}
       <div class="stat-row">
-        <div class="stat-box"><div class="stat-num" style="color:var(--accent)">{{ stats.total }}</div><div class="stat-lbl">Records</div></div>
-        <div class="stat-box"><div class="stat-num" style="color:var(--red)">{{ stats.diabetic }}</div><div class="stat-lbl">Diabetic</div></div>
-        <div class="stat-box"><div class="stat-num" style="color:var(--green)">{{ stats.healthy }}</div><div class="stat-lbl">Non-Diabetic</div></div>
-        <div class="stat-box"><div class="stat-num" style="color:var(--amber)">{{ stats.avg_glucose }}</div><div class="stat-lbl">Avg Glucose</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--acc)">{{ diab_stats.total }}</div><div class="stat-lbl">Records</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--red)">{{ diab_stats.diabetic }}</div><div class="stat-lbl">Diabetic</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--grn)">{{ diab_stats.healthy }}</div><div class="stat-lbl">Non-Diabetic</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--amb)">{{ diab_stats.avg_glucose }}</div><div class="stat-lbl">Avg Glucose</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--acc)">{{ diab_stats.dataset_size }}</div><div class="stat-lbl">Trained On</div></div>
       </div>
+      {% else %}
+      <div class="stat-row">
+        <div class="stat-box"><div class="stat-num" style="color:var(--acc)">{{ heart_stats.total }}</div><div class="stat-lbl">Records</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--red)">{{ heart_stats.disease }}</div><div class="stat-lbl">Heart Disease</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--grn)">{{ heart_stats.healthy }}</div><div class="stat-lbl">Healthy</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--amb)">{{ heart_stats.avg_chol }}</div><div class="stat-lbl">Avg Chol.</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--acc)">{{ heart_stats.dataset_size }}</div><div class="stat-lbl">Trained On</div></div>
+      </div>
+      {% endif %}
     </div>
-    <div class="statusbar"><span>4 items, {{ stats.total }} records loaded</span><span>Model: {{ model_name }} | {{ model_acc }}% accuracy</span></div>
+    <div class="sbar">
+      <span>Model: {% if disease == 'diabetes' %}{{ diab_model }} | {{ diab_acc }}% accuracy{% else %}{{ heart_model }} | {{ heart_acc }}% accuracy{% endif %}</span>
+      <span>SMOTE-augmented dataset</span>
+    </div>
   </div>
 
-  <!-- MAIN TWO-COL -->
+  <!-- MAIN COLS -->
   <div class="main-cols">
 
-    <!-- FORM -->
+    <!-- FORM WINDOW -->
     <div class="window">
-      <div class="window-titlebar">
-        <div class="wctrl-group"><div class="wctrl">&#9632;</div><div class="wctrl"></div></div>
-        <div class="win-title">&#128221; Patient Data Entry</div>
-        <div class="win-title-spacer"></div>
+      <div class="titlebar">
+        <div class="wg"><div class="wc">&#9632;</div><div class="wc"></div></div>
+        <div class="wt">&#128221; Patient Data Entry — {% if disease == 'diabetes' %}Diabetes{% else %}Heart Disease{% endif %}</div>
+        <div class="wsp"></div>
       </div>
-      <div class="window-body">
-        <form method="POST" novalidate id="predict-form">
+      <div class="wbody">
+        <form method="POST" novalidate id="pf">
           {% csrf_token %}
+          <input type="hidden" name="disease" value="{{ disease }}">
           <div class="form-grid">
-            {% for field in form %}
-            <div class="field-wrap">
-              <label class="field-label">{{ field.label }}</label>
-              {{ field }}
-              {% if field.errors %}<div class="field-error">&#9888; {{ field.errors.0 }}</div>{% endif %}
-              <div class="field-hint">{{ field.help_text }}</div>
-            </div>
-            {% endfor %}
+            {% if disease == 'diabetes' %}
+              {% for field in diab_form %}
+              <div class="field-wrap">
+                <label class="field-label">
+                  {% with fname=field.html_name %}
+                    {% if indicators and fname in indicators %}
+                      <span class="indicator ind-{{ indicators|default_if_none:'' }}{% if indicators %}{{ indicators|default_if_none:'' }}{% endif %}
+                        ind-{% with col=indicators|default_if_none:'' %}{{ col }}{% endwith %}
+                        {% if fname == 'glucose' %}ind-{{ indicators.glucose }}{% elif fname == 'blood_pressure' %}ind-{{ indicators.blood_pressure }}{% elif fname == 'bmi' %}ind-{{ indicators.bmi }}{% elif fname == 'insulin' %}ind-{{ indicators.insulin }}{% elif fname == 'age' %}ind-{{ indicators.age }}{% else %}ind-neutral{% endif %}
+                      "></span>
+                    {% endif %}
+                  {% endwith %}
+                  {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.errors %}<div class="field-error">&#9888; {{ field.errors.0 }}</div>{% endif %}
+                <div class="field-hint">{{ field.help_text }}</div>
+              </div>
+              {% endfor %}
+            {% else %}
+              {% for field in heart_form %}
+              <div class="field-wrap">
+                <label class="field-label">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}<div class="field-error">&#9888; {{ field.errors.0 }}</div>{% endif %}
+                <div class="field-hint">{{ field.help_text }}</div>
+              </div>
+              {% endfor %}
+            {% endif %}
           </div>
-          <hr class="mac-hr"/>
+          <hr class="mac-hr">
           <div class="btn-row">
-            <button type="button" class="mac-btn" id="clear-btn" onclick="clearForm()">Clear</button>
-            <button type="submit" class="mac-btn default" id="predict-btn">&#128269; Run Prediction</button>
+            <button type="button" class="mac-btn" id="clr-btn" onclick="document.getElementById('pf').reset()">Clear</button>
+            <button type="submit" class="mac-btn default" id="sub-btn">&#128269; Run Prediction</button>
           </div>
         </form>
       </div>
@@ -784,307 +433,362 @@
 
     <!-- RIGHT COL -->
     <div class="right-col">
+
+      <!-- RESULT -->
       <div class="window">
-        <div class="window-titlebar {% if not result %}inactive{% endif %}">
-          <div class="wctrl-group"><div class="wctrl">&#9632;</div><div class="wctrl"></div></div>
-          <div class="win-title">{% if result %}&#128994;{% else %}&#9744;{% endif %} Prediction Result</div>
-          <div class="win-title-spacer"></div>
+        <div class="titlebar {% if not result %}inactive{% endif %}">
+          <div class="wg"><div class="wc">&#9632;</div><div class="wc"></div></div>
+          <div class="wt">{% if result %}&#128994;{% else %}&#9744;{% endif %} Prediction Result</div>
+          <div class="wsp"></div>
         </div>
-        <div class="window-body">
+        <div class="wbody">
           {% if result %}
-          <div class="result-box">
-            <div class="result-icon-row">
-              <div class="result-icon {{ result.color }}">{% if result.label_int == 1 %}&#9888;{% else %}&#10003;{% endif %}</div>
+          <div class="res-box">
+            <div class="res-icon-row">
+              <div class="res-icon {{ result.color }}">{% if result.label_int == 1 %}&#9888;{% else %}&#10003;{% endif %}</div>
               <div>
-                <div class="result-name {{ result.color }}">{{ result.label|upper }}</div>
-                <div><span class="risk-chip {{ result.risk_level }}">{{ result.risk_level }} Risk</span></div>
+                <div class="res-name {{ result.color }}">{{ result.label|upper }}</div>
+                <span class="chip {{ result.risk_level }}">{{ result.risk_level }} Risk</span>
               </div>
             </div>
-            <div class="progress-wrap">
-              <div class="progress-label"><span>Confidence</span><span>{{ result.confidence }}%</span></div>
-              <div class="progress-track"><div class="progress-fill {{ result.color }}" style="width:{{ result.confidence }}%"></div></div>
+            <div class="prog-wrap">
+              <div class="prog-lbl"><span>Model Confidence</span><span>{{ result.confidence }}%</span></div>
+              <div class="prog-track"><div class="prog-fill {{ result.color }}" style="width:{{ result.confidence }}%"></div></div>
             </div>
-            <p class="result-note">{% if result.label_int == 1 %}&#9888; Please consult a healthcare professional for a confirmed diagnosis.{% else %}&#10003; Maintain a healthy lifestyle to keep diabetes risk low.{% endif %}</p>
+            {% if indicators %}
+            <div class="ind-row">
+              {% for field, color in indicators.items %}
+              <div class="ind-item"><span class="indicator ind-{{ color }}"></span>{{ field }}</div>
+              {% endfor %}
+            </div>
+            {% endif %}
+            <p class="res-note">{% if result.label_int == 1 %}&#9888; Please consult a healthcare professional for confirmed diagnosis.{% else %}&#10003; Maintain a healthy lifestyle to keep risk low.{% endif %}</p>
           </div>
           {% else %}
           <div class="empty-pane">
             <span class="big">&#9744;</span>
-            <p>No prediction yet.<br/>Enter patient data and<br/>click Run Prediction.</p>
+            <p>No prediction yet.<br>Fill in the form and<br>click Run Prediction.</p>
           </div>
           {% endif %}
         </div>
-        {% if result %}<div class="statusbar"><span>Prediction complete</span><span>Confidence: {{ result.confidence }}%</span></div>{% endif %}
+        {% if result %}<div class="sbar"><span>Prediction complete</span><span>Confidence: {{ result.confidence }}%</span></div>{% endif %}
       </div>
 
+      <!-- HISTORY -->
       {% if history %}
       <div class="window">
-        <div class="window-titlebar inactive">
-          <div class="wctrl-group"><div class="wctrl">&#9632;</div><div class="wctrl"></div></div>
-          <div class="win-title">&#128347; Recent Predictions Log</div>
-          <div class="win-title-spacer"></div>
+        <div class="titlebar inactive">
+          <div class="wg"><div class="wc">&#9632;</div><div class="wc"></div></div>
+          <div class="wt">&#128347; Prediction History — {% if disease == 'diabetes' %}Diabetes{% else %}Heart{% endif %}</div>
+          <div class="wsp"></div>
         </div>
-        <div class="window-scroll">
+        <div class="wscroll">
           <table class="mac-table">
-            <thead><tr><th>Date</th><th>Glucose</th><th>BMI</th><th>Age</th><th>Result</th><th>Conf.</th></tr></thead>
+            <thead><tr><th>Date</th>{% if disease == 'diabetes' %}<th>Glucose</th><th>BMI</th>{% else %}<th>Chol.</th><th>BP</th>{% endif %}<th>Age</th><th>Result</th><th>Conf.</th></tr></thead>
             <tbody>
               {% for r in history %}
               <tr>
                 <td>{{ r.created_at|date:"d/m H:i" }}</td>
-                <td>{{ r.glucose }}</td>
-                <td>{{ r.bmi }}</td>
+                {% if disease == 'diabetes' %}<td>{{ r.glucose }}</td><td>{{ r.bmi }}</td>{% else %}<td>{{ r.chol }}</td><td>{{ r.trestbps }}</td>{% endif %}
                 <td>{{ r.age }}</td>
-                <td class="{% if r.prediction == 'Diabetic' %}tag-d{% else %}tag-n{% endif %}">{{ r.prediction }}</td>
+                <td class="{% if 'Diabetic' in r.prediction or 'Disease' in r.prediction %}tag-d{% else %}tag-n{% endif %}">{{ r.prediction }}</td>
                 <td>{{ r.confidence }}%</td>
               </tr>
               {% endfor %}
             </tbody>
           </table>
         </div>
-        <div class="statusbar"><span>{{ history|length }} recent items</span><span>Sorted: date &#9660;</span></div>
+        <div class="sbar"><span>{{ history|length }} recent predictions</span><span>Sorted: date &#9660;</span></div>
       </div>
       {% endif %}
+
     </div>
   </div>
 
-  <!-- BOTTOM TABLES -->
+  <!-- CHART ROW -->
+  <div class="chart-row">
+
+    <!-- RADAR CHART -->
+    <div class="window">
+      <div class="titlebar inactive">
+        <div class="wg"><div class="wc">&#9632;</div><div class="wc"></div></div>
+        <div class="wt">&#9096; Patient vs. Average Radar</div>
+        <div class="wsp"></div>
+      </div>
+      <div class="chart-canvas-wrap">
+        {% if result %}
+        <canvas id="radarChart"></canvas>
+        {% else %}
+        <div class="empty-pane" style="padding:40px 8px"><span class="big" style="font-size:32px">&#9096;</span><p>Run a prediction<br>to see radar chart</p></div>
+        {% endif %}
+      </div>
+      <div class="sbar"><span>Patient values vs dataset mean</span><span>Normalised 0–1</span></div>
+    </div>
+
+    <!-- FEATURE IMPORTANCE -->
+    <div class="window">
+      <div class="titlebar inactive">
+        <div class="wg"><div class="wc">&#9632;</div><div class="wc"></div></div>
+        <div class="wt">&#128200; Feature Importance</div>
+        <div class="wsp"></div>
+      </div>
+      <div class="chart-canvas-wrap">
+        {% if result %}
+        <canvas id="fiChart"></canvas>
+        {% else %}
+        <div class="empty-pane" style="padding:40px 8px"><span class="big" style="font-size:32px">&#128200;</span><p>Run a prediction<br>to see importance</p></div>
+        {% endif %}
+      </div>
+      <div class="sbar"><span>Model feature weights</span><span>Random Forest</span></div>
+    </div>
+
+    <!-- DISTRIBUTION CHART -->
+    <div class="window">
+      <div class="titlebar inactive">
+        <div class="wg"><div class="wc">&#9632;</div><div class="wc"></div></div>
+        <div class="wt">&#128202; {% if disease == 'diabetes' %}Glucose Distribution{% else %}Cholesterol Distribution{% endif %}</div>
+        <div class="wsp"></div>
+      </div>
+      <div class="chart-canvas-wrap">
+        <canvas id="distChart"></canvas>
+      </div>
+      <div class="sbar"><span>Healthy vs Disease split</span><span>Dataset histogram</span></div>
+    </div>
+
+  </div>
+
+  <!-- RISK PROFILE TABLES -->
   <div class="bottom-grid">
     <div class="window">
-      <div class="window-titlebar inactive">
-        <div class="wctrl-group"><div class="wctrl">&#9632;</div><div class="wctrl"></div></div>
-        <div class="win-title">&#9888; High-Risk Patient Profiles</div>
-        <div class="win-title-spacer"></div>
+      <div class="titlebar inactive">
+        <div class="wg"><div class="wc">&#9632;</div><div class="wc"></div></div>
+        <div class="wt">&#9888; High-Risk Profiles</div>
+        <div class="wsp"></div>
       </div>
-      <div class="window-scroll">
-        <table class="mac-table">
-          <thead><tr>{% for key in high_risk.0.keys %}<th>{{ key }}</th>{% endfor %}</tr></thead>
-          <tbody>{% for p in high_risk %}<tr>{% for v in p.values %}<td>{{ v|floatformat:1 }}</td>{% endfor %}</tr>{% endfor %}</tbody>
-        </table>
+      <div class="wscroll">
+        {% if disease == 'diabetes' %}
+        <table class="mac-table"><thead><tr>{% for k in diab_high.0.keys %}<th>{{ k }}</th>{% endfor %}</tr></thead><tbody>{% for p in diab_high %}<tr>{% for v in p.values %}<td>{{ v|floatformat:1 }}</td>{% endfor %}</tr>{% endfor %}</tbody></table>
+        {% else %}
+        <table class="mac-table"><thead><tr>{% for k in heart_high.0.keys %}<th>{{ k }}</th>{% endfor %}</tr></thead><tbody>{% for p in heart_high %}<tr>{% for v in p.values %}<td>{{ v|floatformat:1 }}</td>{% endfor %}</tr>{% endfor %}</tbody></table>
+        {% endif %}
       </div>
-      <div class="statusbar"><span>Top 5 highest-risk patients</span><span>Sorted: Glucose &#8595;</span></div>
+      <div class="sbar"><span>Top 5 high-risk patients</span><span>&#8595; sorted by risk</span></div>
     </div>
     <div class="window">
-      <div class="window-titlebar inactive">
-        <div class="wctrl-group"><div class="wctrl">&#9632;</div><div class="wctrl"></div></div>
-        <div class="win-title">&#10003; Low-Risk Patient Profiles</div>
-        <div class="win-title-spacer"></div>
+      <div class="titlebar inactive">
+        <div class="wg"><div class="wc">&#9632;</div><div class="wc"></div></div>
+        <div class="wt">&#10003; Low-Risk Profiles</div>
+        <div class="wsp"></div>
       </div>
-      <div class="window-scroll">
-        <table class="mac-table">
-          <thead><tr>{% for key in low_risk.0.keys %}<th>{{ key }}</th>{% endfor %}</tr></thead>
-          <tbody>{% for p in low_risk %}<tr>{% for v in p.values %}<td>{{ v|floatformat:1 }}</td>{% endfor %}</tr>{% endfor %}</tbody>
-        </table>
+      <div class="wscroll">
+        {% if disease == 'diabetes' %}
+        <table class="mac-table"><thead><tr>{% for k in diab_low.0.keys %}<th>{{ k }}</th>{% endfor %}</tr></thead><tbody>{% for p in diab_low %}<tr>{% for v in p.values %}<td>{{ v|floatformat:1 }}</td>{% endfor %}</tr>{% endfor %}</tbody></table>
+        {% else %}
+        <table class="mac-table"><thead><tr>{% for k in heart_low.0.keys %}<th>{{ k }}</th>{% endfor %}</tr></thead><tbody>{% for p in heart_low %}<tr>{% for v in p.values %}<td>{{ v|floatformat:1 }}</td>{% endfor %}</tr>{% endfor %}</tbody></table>
+        {% endif %}
       </div>
-      <div class="statusbar"><span>Top 5 lowest-risk patients</span><span>Sorted: Glucose &#8593;</span></div>
+      <div class="sbar"><span>Top 5 low-risk patients</span><span>&#8593; sorted by safety</span></div>
     </div>
   </div>
 
-</div><!-- /desktop -->
+</div>
 
 <!-- TASKBAR -->
 <div class="taskbar">
-  <div class="taskbar-app">&#128203; DiabetesPrediction</div>
-  <div class="taskbar-sep"></div>
-  <div class="taskbar-app">&#128736; Finder</div>
-  <div class="taskbar-sep"></div>
-  <div class="taskbar-app" style="color:var(--accent)">&#128200; {{ model_name }}</div>
-  <div class="taskbar-right">
-    <span>Accuracy: {{ model_acc }}%</span>
-    <div class="taskbar-clock" id="tbclock">--:-- --</div>
+  <div class="tb-app">&#128203; MediSystem</div>
+  <div class="tb-sep"></div>
+  <div class="tb-app" style="color:{% if disease == 'diabetes' %}var(--acc){% else %}var(--red){% endif %}">{% if disease == 'diabetes' %}&#128137; Diabetes{% else %}&#128148; Heart{% endif %}</div>
+  <div class="tb-sep"></div>
+  <div class="tb-app">&#128200; {% if disease == 'diabetes' %}{{ diab_model }} {{ diab_acc }}%{% else %}{{ heart_model }} {{ heart_acc }}%{% endif %}</div>
+  <div class="tb-right">
+    <div class="tb-clock" id="tbc">--:-- --</div>
   </div>
 </div>
 
 <script>
-/* ════════════════════════════════════
-   WEB AUDIO — RETRO SOUND ENGINE
-════════════════════════════════════ */
-const AudioCtx = window.AudioContext || window.webkitAudioContext;
-let audioCtx = null;
+/* ── CHART DATA ──────────────────────────────────────────────── */
+const chartData = {{ chart_json|safe }};
+const radarData = {{ radar_json|safe }};
+const fiData    = {{ fi_json|safe }};
+const disease   = "{{ disease }}";
 
-function getCtx() {
-  if (!audioCtx) audioCtx = new AudioCtx();
-  return audioCtx;
+/* ── RETRO CHART DEFAULTS ────────────────────────────────────── */
+function getCSS(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+
+function retroDefaults(){
+  const txt = getCSS('--text');
+  const bdm = getCSS('--bdm');
+  Chart.defaults.color          = txt;
+  Chart.defaults.borderColor    = bdm;
+  Chart.defaults.font.family    = "'IBM Plex Mono', monospace";
+  Chart.defaults.font.size      = 10;
+  Chart.defaults.plugins.legend.labels.boxWidth = 10;
 }
 
-function beep(freq, dur, type='square', vol=0.08) {
-  try {
-    const ctx  = getCtx();
-    const osc  = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, ctx.currentTime);
-    gain.gain.setValueAtTime(vol, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + dur);
-  } catch(e){}
+function buildCharts(){
+  retroDefaults();
+  const red = getCSS('--red'), grn = getCSS('--grn'),
+        amb = getCSS('--amb'), acc = getCSS('--acc'), txt = getCSS('--text');
+
+  /* RADAR */
+  if(radarData && document.getElementById('radarChart')){
+    new Chart(document.getElementById('radarChart'),{
+      type:'radar',
+      data:{
+        labels: radarData.labels,
+        datasets:[
+          {label:'Patient',  data:radarData.patient, borderColor:red,  backgroundColor:red+'33',  pointBackgroundColor:red,  borderWidth:2, pointRadius:3},
+          {label:'Avg',      data:radarData.average, borderColor:grn,  backgroundColor:grn+'22',  pointBackgroundColor:grn,  borderWidth:1, pointRadius:2, borderDash:[4,3]},
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,
+        scales:{r:{ticks:{display:false,stepSize:.2},pointLabels:{font:{size:9,family:"'IBM Plex Mono',monospace"}},grid:{color:getCSS('--bdm')},angleLines:{color:getCSS('--bdm')}}},
+        plugins:{legend:{position:'bottom',labels:{font:{size:9}}}}
+      }
+    });
+  }
+
+  /* FEATURE IMPORTANCE */
+  if(fiData && document.getElementById('fiChart')){
+    const sorted = Object.entries(fiData).sort((a,b)=>b[1]-a[1]).slice(0,7);
+    new Chart(document.getElementById('fiChart'),{
+      type:'bar',
+      data:{
+        labels: sorted.map(x=>x[0]),
+        datasets:[{
+          label:'Importance %',
+          data: sorted.map(x=>x[1]),
+          backgroundColor:[red,amb,acc,grn,red+'99',amb+'99',acc+'99'],
+          borderColor: getCSS('--bd'), borderWidth:1,
+        }]
+      },
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        scales:{x:{grid:{color:getCSS('--bdm')},ticks:{font:{size:9}}},
+                y:{grid:{display:false},ticks:{font:{size:9,family:"'IBM Plex Mono',monospace"}}}},
+        plugins:{legend:{display:false}}
+      }
+    });
+  }
+
+  /* DISTRIBUTION */
+  if(document.getElementById('distChart')){
+    let labels, d0, d1, l0, l1;
+    if(disease === 'diabetes'){
+      labels = chartData.glucose.labels;
+      d0 = chartData.glucose.healthy;
+      d1 = chartData.glucose.diabetic;
+      l0 = 'Non-Diabetic'; l1 = 'Diabetic';
+    } else {
+      labels = chartData.glucose.labels; // reuse glucose bins as proxy
+      d0 = chartData.glucose.healthy;
+      d1 = chartData.glucose.diabetic;
+      l0 = 'Healthy'; l1 = 'Heart Disease';
+    }
+    new Chart(document.getElementById('distChart'),{
+      type:'bar',
+      data:{
+        labels,
+        datasets:[
+          {label:l0, data:d0, backgroundColor:grn+'88', borderColor:grn, borderWidth:1},
+          {label:l1, data:d1, backgroundColor:red+'88', borderColor:red, borderWidth:1},
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,
+        scales:{x:{stacked:false,grid:{display:false},ticks:{font:{size:8}}},
+                y:{grid:{color:getCSS('--bdm')},ticks:{font:{size:9}}}},
+        plugins:{legend:{position:'bottom',labels:{font:{size:9}}}}
+      }
+    });
+  }
 }
 
-function sfxClick()   { beep(880, .05, 'square', .06); }
-function sfxClear()   { beep(440, .08, 'square', .05); setTimeout(()=>beep(330,.06,'square',.04),60); }
-function sfxSubmit()  { beep(660,.06,'square',.07); setTimeout(()=>beep(880,.08,'square',.07),80); setTimeout(()=>beep(1100,.12,'square',.06),170); }
-function sfxOpen()    { [880,1100,1320].forEach((f,i)=>setTimeout(()=>beep(f,.08,'sine',.05),i*60)); }
-function sfxClose()   { [1320,880,440].forEach((f,i)=>setTimeout(()=>beep(f,.07,'sine',.04),i*50)); }
-function sfxBoot(cb)  {
-  const notes = [261,329,392,523];
-  notes.forEach((f,i)=>setTimeout(()=>beep(f,.15,'triangle',.07),i*180));
-  setTimeout(cb, notes.length*180+300);
+/* ── BOOT ────────────────────────────────────────────────────── */
+const MSGS=['Initializing memory...','Loading ML models...','Mounting datasets...','Starting Django server...','Building charts...','Launching MediSystem...'];
+let prog=0;
+const bpf=document.getElementById('bpf'),bst=document.getElementById('bst'),bootEl=document.getElementById('boot'),desk=document.getElementById('desk');
+
+function sfxBoot(cb){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    [261,329,392,523].forEach((f,i)=>setTimeout(()=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.type='triangle';o.frequency.value=f;
+      g.gain.setValueAtTime(.07,ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.15);
+      o.start();o.stop(ctx.currentTime+.15);
+    },i*180));
+    setTimeout(cb,4*180+300);
+  }catch(e){setTimeout(cb,100)}
 }
-function sfxChime()   { [1046,1318,1568].forEach((f,i)=>setTimeout(()=>beep(f,.2,'sine',.06),i*100)); }
-
-/* Wire buttons */
-document.addEventListener('DOMContentLoaded', () => {
-  const clearBtn   = document.getElementById('clear-btn');
-  const predictBtn = document.getElementById('predict-btn');
-  if (clearBtn)   clearBtn.addEventListener('mousedown',   sfxClear);
-  if (predictBtn) predictBtn.addEventListener('mousedown', sfxSubmit);
-  document.querySelectorAll('.mac-btn').forEach(b => {
-    if (b.id !== 'clear-btn' && b.id !== 'predict-btn')
-      b.addEventListener('mousedown', sfxClick);
-  });
-  document.querySelectorAll('.wctrl').forEach(b => b.addEventListener('mousedown', sfxClick));
-  document.querySelectorAll('.menu-item, .amd-item').forEach(b => b.addEventListener('mousedown', sfxClick));
-});
-
-/* ════════════════════════════════════
-   BOOT SEQUENCE
-════════════════════════════════════ */
-const bootMessages = [
-  'Loading extensions...',
-  'Initializing memory...',
-  'Mounting volumes...',
-  'Loading ML model...',
-  'Starting Django...',
-  'Launching app...',
-];
-let bootProgress = 0;
-const bootBar    = document.getElementById('boot-bar');
-const bootStatus = document.getElementById('boot-status');
-const bootEl     = document.getElementById('boot');
-const desktop    = document.getElementById('main-desktop');
-
-function advanceBoot() {
-  bootProgress += Math.random() * 18 + 10;
-  if (bootProgress > 100) bootProgress = 100;
-  bootBar.style.width = bootProgress + '%';
-  const idx = Math.floor((bootProgress / 100) * bootMessages.length);
-  bootStatus.textContent = bootMessages[Math.min(idx, bootMessages.length - 1)];
-
-  if (bootProgress < 100) {
-    setTimeout(advanceBoot, Math.random() * 200 + 100);
-  } else {
-    setTimeout(() => {
-      sfxChime();
+function advBoot(){
+  prog+=Math.random()*16+8;
+  if(prog>100)prog=100;
+  bpf.style.width=prog+'%';
+  bst.textContent=MSGS[Math.min(Math.floor(prog/100*MSGS.length),MSGS.length-1)];
+  if(prog<100){setTimeout(advBoot,Math.random()*200+80);}
+  else{
+    setTimeout(()=>{
       bootEl.classList.add('fade-out');
-      desktop.style.opacity = '1';
-      setTimeout(() => bootEl.classList.add('gone'), 900);
-    }, 400);
+      desk.style.opacity='1';
+      buildCharts();
+      setTimeout(()=>bootEl.classList.add('gone'),900);
+    },350);
   }
 }
+window.addEventListener('load',()=>sfxBoot(advBoot));
 
-window.addEventListener('load', () => {
-  sfxBoot(() => { advanceBoot(); });
+/* ── AUDIO ───────────────────────────────────────────────────── */
+let actx=null;
+function gac(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();return actx;}
+function beep(f,d,t='square',v=.07){
+  try{const ctx=gac(),o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+d);o.start();o.stop(ctx.currentTime+d);}catch(e){}
+}
+function sfxClick(){beep(880,.05,'square',.06)}
+function sfxClear(){beep(440,.08);setTimeout(()=>beep(330,.06),60)}
+function sfxSubmit(){beep(660,.06);setTimeout(()=>beep(880,.08),80);setTimeout(()=>beep(1100,.12),170)}
+function sfxOpen(){[880,1100,1320].forEach((f,i)=>setTimeout(()=>beep(f,.08,'sine',.05),i*60))}
+function sfxClose(){[1320,880,440].forEach((f,i)=>setTimeout(()=>beep(f,.07,'sine',.04),i*50))}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const cb=document.getElementById('clr-btn'),sb=document.getElementById('sub-btn');
+  if(cb)cb.addEventListener('mousedown',sfxClear);
+  if(sb)sb.addEventListener('mousedown',sfxSubmit);
+  document.querySelectorAll('.mac-btn').forEach(b=>{if(b!==cb&&b!==sb)b.addEventListener('mousedown',sfxClick)});
+  document.querySelectorAll('.wc,.menu-item,.amd-item,.ds-btn').forEach(b=>b.addEventListener('mousedown',sfxClick));
+  // Apply mac-input/select classes from Django
+  document.querySelectorAll('input[type=number],input[type=text]').forEach(el=>el.className='mac-input');
+  document.querySelectorAll('select').forEach(el=>el.className='mac-select');
 });
 
-/* ════════════════════════════════════
-   DAY / NIGHT MODE
-════════════════════════════════════ */
-const html       = document.documentElement;
-const themeItem  = document.getElementById('theme-item');
-const nightBtnIcon = document.getElementById('night-btn-icon');
-
-function applyTheme(t) {
-  html.setAttribute('data-theme', t);
-  localStorage.setItem('mac-theme', t);
-  if (t === 'night') {
-    if (themeItem)   themeItem.textContent = '☀ Switch to Day Mode';
-    if (nightBtnIcon) nightBtnIcon.textContent = '☀';
-  } else {
-    if (themeItem)   themeItem.textContent = '☾ Switch to Night Mode';
-    if (nightBtnIcon) nightBtnIcon.textContent = '☾';
-  }
+/* ── THEME ───────────────────────────────────────────────────── */
+const html=document.documentElement;
+function applyTheme(t){
+  html.setAttribute('data-theme',t);localStorage.setItem('mac-theme',t);
+  const ti=document.getElementById('theme-item'),ni=document.getElementById('nbi');
+  if(t==='night'){if(ti)ti.textContent='☀ Switch to Day Mode';if(ni)ni.textContent='☀';}
+  else{if(ti)ti.textContent='☾ Switch to Night Mode';if(ni)ni.textContent='☾';}
 }
+function toggleTheme(){sfxClick();applyTheme(html.getAttribute('data-theme')==='night'?'day':'night');closeAM();}
+const saved=localStorage.getItem('mac-theme');if(saved)applyTheme(saved);
 
-function toggleTheme() {
-  sfxClick();
-  const cur = html.getAttribute('data-theme');
-  applyTheme(cur === 'night' ? 'day' : 'night');
-  closeAppleMenu();
-}
+/* ── APPLE MENU ──────────────────────────────────────────────── */
+const amd=document.getElementById('amd');
+function toggleAM(){sfxClick();amd.classList.toggle('open')}
+function closeAM(){amd.classList.remove('open')}
+document.addEventListener('click',e=>{if(!document.getElementById('amb').contains(e.target))closeAM()});
 
-/* Restore saved theme */
-const saved = localStorage.getItem('mac-theme');
-if (saved) applyTheme(saved);
+/* ── TEAM ────────────────────────────────────────────────────── */
+const tm=document.getElementById('team-modal');
+function openTeam(){sfxOpen();tm.classList.add('open');closeAM()}
+function closeTeam(){sfxClose();tm.classList.remove('open')}
+tm.addEventListener('click',e=>{if(e.target===tm)closeTeam()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeTeam()});
+function aboutApp(){sfxClick();closeAM();alert('MediSystem v2.0\nDiabetes: '+{{ diab_acc }}+'% acc (AUC {{ diab_stats.total }})\nHeart Disease: '+{{ heart_acc }}+'% acc\nBuilt with Django + scikit-learn + Chart.js\nMUIT Noida 2021-2025');}
 
-/* ════════════════════════════════════
-   APPLE MENU DROPDOWN
-════════════════════════════════════ */
-const appleDropdown = document.getElementById('apple-dropdown');
-
-function toggleAppleMenu() {
-  sfxClick();
-  appleDropdown.classList.toggle('open');
-}
-function closeAppleMenu() {
-  appleDropdown.classList.remove('open');
-}
-document.addEventListener('click', e => {
-  if (!document.getElementById('apple-menu-btn').contains(e.target))
-    closeAppleMenu();
-});
-
-/* ════════════════════════════════════
-   TEAM MODAL
-════════════════════════════════════ */
-const teamModal = document.getElementById('team-modal');
-
-function openTeam() {
-  sfxOpen();
-  teamModal.classList.add('open');
-  closeAppleMenu();
-}
-function closeTeam() {
-  sfxClose();
-  teamModal.classList.remove('open');
-}
-teamModal.addEventListener('click', e => {
-  if (e.target === teamModal) closeTeam();
-});
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeTeam();
-});
-
-function aboutApp() {
-  sfxClick();
-  closeAppleMenu();
-  alert('Diabetes Prediction System v1.0\nModel: {{ model_name }}\nAccuracy: {{ model_acc }}%\nBuilt with Django + scikit-learn\nMUIT Noida · Batch 2021–2025');
-}
-
-function clearForm() {
-  document.getElementById('predict-form').reset();
-}
-
-/* ════════════════════════════════════
-   CLOCK
-════════════════════════════════════ */
-function tick() {
-  const now  = new Date();
-  const h    = now.getHours();
-  const m    = String(now.getMinutes()).padStart(2,'0');
-  const ampm = h >= 12 ? 'PM' : 'AM';
-  const str  = `${h%12||12}:${m} ${ampm}`;
-  const c1 = document.getElementById('mbclock');
-  const c2 = document.getElementById('tbclock');
-  if (c1) c1.textContent = str;
-  if (c2) c2.textContent = str;
-}
-tick(); setInterval(tick, 1000);
-
-/* Apply mac-input to Django form inputs */
-document.querySelectorAll('input[type=number],input[type=text]').forEach(el => {
-  el.className = 'mac-input';
-});
+/* ── CLOCK ───────────────────────────────────────────────────── */
+function tick(){const n=new Date(),h=n.getHours(),m=String(n.getMinutes()).padStart(2,'0'),ap=h>=12?'PM':'AM',s=`${h%12||12}:${m} ${ap}`;['mbc','tbc'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=s;});}
+tick();setInterval(tick,1000);
 </script>
 </body>
 </html>

@@ -213,9 +213,9 @@ Session 2021–2025
 
 | Member | Role |
 |---|---|
-| **Ravada Siddharth** | Backend Development, Django Architecture, ML Integration, UI/UX |
-| **Arpit Kumar** | Machine Learning, Data Preprocessing, Model Training & Evaluation |
-| **Kanak Sharma** | Frontend Development, Django Templates, Documentation & QA |
+| **Siddharth** | Backend Development, Django Architecture, ML Integration, UI |
+| **Arpit** | Machine Learning, Data Preprocessing, Model Training & Evaluation |
+| **Kanak** | Frontend Development, Django Templates, Documentation & QA |
 
 ---
 
