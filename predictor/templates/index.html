@@ -29,22 +29,22 @@
   --phosphor:rgba(42,106,42,.08);
 }
 [data-theme="night"]{
-  --bg:#0d0d0d;--bg-grid:rgba(0,255,0,.015);--win:#0f1208;--chrome:#1a1e10;
-  --text:#33ff33;--textm:#22bb22;--textd:#155515;
-  --bd:#33ff33;--bdm:#22aa22;--bdl:#114411;
-  --bf:#0f1208;--bhi:#1a2010;--bsh:#001100;
-  --bar0:#1a2010;--bar1:#0f1208;--bar2:#141a0c;--bart:#33ff33;
-  --bari0:#0d0d0d;--bari1:#0a0a0a;
-  --acc:#33ffff;--grn:#33ff33;--red:#ff3333;--amb:#ffaa00;
-  --sel:#003300;--selt:#33ff33;
-  --sb:#0a0f06;--inp:#080d04;--ralt:#0d1208;--rhov:#0d2010;
-  --tb:linear-gradient(180deg,#0f1208,#080d04);
-  --mo:rgba(0,10,0,.85);--mg:rgba(8,13,4,.97);
-  --boot:#000;--boott:#33ff33;
-  --scan:rgba(0,255,0,.025);
-  --hb-color:#ff3333;
-  --term-green:#33ff33;
-  --phosphor:rgba(51,255,51,.04);
+  --bg:#1a1410;--bg-grid:rgba(255,255,255,.02);--win:#28201a;--chrome:#322820;
+  --text:#e8dcc8;--textm:#b8a898;--textd:#8a7868;
+  --bd:#6a5848;--bdm:#5a4838;--bdl:#3a3028;
+  --bf:#4a4030;--bhi:#5a5040;--bsh:#201808;
+  --bar0:#3a3028;--bar1:#2a2018;--bar2:#322820;--bart:#c8b898;
+  --bari0:#282018;--bari1:#201810;
+  --acc:#5a8abc;--grn:#4a9a4a;--red:#b85050;--amb:#b89040;
+  --sel:#1a2a6a;--selt:#e8dcc8;
+  --sb:#201810;--inp:#1a1208;--ralt:#322820;--rhov:#2a3050;
+  --tb:linear-gradient(180deg,#282018,#201810);
+  --mo:rgba(10,8,4,.78);--mg:rgba(28,22,14,.97);
+  --boot:#0a0806;--boott:#e8dcc8;
+  --scan:rgba(0,0,0,.012);
+  --hb-color:#b85050;
+  --term-green:#4a9a4a;
+  --phosphor:rgba(232,220,200,.02);
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -68,43 +68,185 @@ body::before{
   background:repeating-linear-gradient(0deg,transparent,transparent 2px,var(--scan) 2px,var(--scan) 4px);
 }
 
-/* PHOSPHOR GLOW in night mode */
+/* night mode window depth */
 [data-theme="night"] .window{
   box-shadow:inset 1px 1px 0 var(--bhi),inset -1px -1px 0 var(--bsh),
-             3px 3px 0 rgba(0,0,0,.9),0 0 20px rgba(51,255,51,.05)!important;
+             3px 3px 0 rgba(0,0,0,.6)!important;
 }
-[data-theme="night"] .mac-input,[data-theme="night"] .mac-select{
-  box-shadow:0 0 6px rgba(51,255,51,.1)!important;
-  caret-color:var(--grn);
+[data-theme="night"] .mac-input:focus,[data-theme="night"] .mac-select:focus{
+  border-color:var(--acc);box-shadow:inset 2px 2px 3px rgba(0,0,0,.3),0 0 0 1px var(--acc);
 }
 
 /* ── BOOT SCREEN ────────────────────────────────────────────── */
 #boot{
   position:fixed;inset:0;z-index:9999;
-  background:#000;
+  background:#0a0806;
   display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:14px;
-  transition:opacity .8s ease;
-  font-family:'Share Tech Mono',monospace;
+  align-items:center;justify-content:center;gap:32px;
+  transition:opacity 1s ease;
 }
 #boot.fade-out{opacity:0;pointer-events:none}
 #boot.gone{display:none}
-.boot-pre{
-  font-size:12px;color:#33ff33;line-height:1.6;
-  text-align:left;width:460px;
-  text-shadow:0 0 8px #33ff33;
+
+/* Gooey morphing text */
+.morph-wrap{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  height:90px;width:460px;
+  filter:url(#goo);
 }
-.boot-cursor{display:inline-block;width:8px;height:14px;background:#33ff33;animation:cur .8s step-end infinite;vertical-align:middle;box-shadow:0 0 6px #33ff33}
-@keyframes cur{0%,100%{opacity:1}50%{opacity:0}}
-.boot-logo{
-  font-family:'VT323',monospace;font-size:48px;color:#33ff33;
-  text-shadow:0 0 20px #33ff33,0 0 40px rgba(51,255,51,.4);
-  letter-spacing:6px;
+.morph-text{
+  position:absolute;
+  font-family:'VT323',monospace;
+  font-size:72px;
+  letter-spacing:8px;
+  color:#e8dcc8;
+  text-align:center;
+  width:100%;
+  transition:opacity .05s;
+  text-shadow:0 0 30px rgba(232,220,200,.3);
 }
-.boot-tagline{font-size:11px;color:#22aa22;letter-spacing:3px;text-transform:uppercase}
-.boot-bar-wrap{width:400px;height:16px;border:1px solid #33ff33;background:#001100;box-shadow:0 0 8px rgba(51,255,51,.2)}
-.boot-bar-fill{height:100%;background:linear-gradient(90deg,#22aa22,#33ff33);box-shadow:0 0 10px #33ff33;width:0%;transition:width .1s linear}
-.boot-status{font-size:10px;color:#22aa22;letter-spacing:1px;height:14px}
+.boot-sub-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;color:#8a7868;
+  letter-spacing:3px;text-transform:uppercase;
+  margin-top:-20px;
+}
+.boot-bar-wrap{
+  width:340px;height:3px;
+  background:rgba(232,220,200,.1);
+  border-radius:2px;overflow:hidden;
+}
+.boot-bar-fill{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,#8a7868,#e8dcc8);
+  border-radius:2px;
+  transition:width .15s linear;
+  box-shadow:0 0 8px rgba(232,220,200,.4);
+}
+.boot-status{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;color:#6a5848;
+  letter-spacing:1px;height:14px;margin-top:-20px;
+}
+
+/* Liquid Glass Enter Button */
+.boot-enter-btn{
+  position:relative;
+  display:none; /* shown after boot completes */
+  cursor:pointer;
+  border:none;background:none;padding:0;
+  outline:none;
+}
+.boot-enter-btn.visible{ display:block; animation:btn-appear .6s cubic-bezier(.2,.8,.4,1) forwards; }
+@keyframes btn-appear{ from{opacity:0;transform:translateY(12px) scale(.9)} to{opacity:1;transform:none} }
+
+.lg-btn{
+  position:relative;
+  padding:14px 48px;
+  border-radius:999px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:14px;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;
+  color:rgba(232,220,200,.95);
+  cursor:pointer;border:none;background:none;
+  /* Liquid glass layers */
+  isolation:isolate;
+  overflow:hidden;
+}
+.lg-btn::before{
+  content:'';position:absolute;inset:0;border-radius:999px;
+  background:
+    radial-gradient(ellipse 80% 40% at 50% 0%, rgba(255,255,255,.18) 0%, transparent 70%),
+    linear-gradient(135deg, rgba(255,255,255,.12) 0%, rgba(255,255,255,.04) 40%, rgba(0,0,0,.1) 100%);
+  backdrop-filter:blur(16px) saturate(1.4);
+  -webkit-backdrop-filter:blur(16px) saturate(1.4);
+  border:1px solid rgba(255,255,255,.2);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.08) inset,
+    0 8px 32px rgba(0,0,0,.4),
+    0 2px 8px rgba(232,220,200,.08);
+  z-index:-1;
+}
+.lg-btn::after{
+  content:'';position:absolute;inset:0;border-radius:999px;
+  background:radial-gradient(ellipse 60% 30% at 50% 100%, rgba(255,255,255,.06) 0%, transparent 70%);
+  z-index:-1;
+}
+.lg-btn:hover::before{
+  background:
+    radial-gradient(ellipse 80% 40% at 50% 0%, rgba(255,255,255,.25) 0%, transparent 70%),
+    linear-gradient(135deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,.06) 40%, rgba(0,0,0,.08) 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.14) inset,
+    0 12px 40px rgba(0,0,0,.45),
+    0 0 20px rgba(232,220,200,.12);
+}
+.lg-btn:active{ transform:scale(.97); }
+.lg-btn-ripple{
+  position:absolute;border-radius:50%;
+  background:rgba(255,255,255,.15);
+  transform:scale(0);animation:ripple .5s linear;
+  pointer-events:none;
+}
+@keyframes ripple{to{transform:scale(3);opacity:0}}
+
+/* ── LEVER SWITCH ──────────────────────────────────────────── */
+.lever-wrap{
+  display:flex;align-items:center;gap:10px;
+  margin-right:4px;
+}
+.lever-label{
+  font-size:10px;font-family:'IBM Plex Mono',monospace;
+  color:var(--textd);text-transform:uppercase;letter-spacing:.8px;
+  line-height:1.2;text-align:right;max-width:56px;
+}
+.lever-switch{
+  position:relative;width:38px;height:64px;
+  cursor:pointer;flex-shrink:0;
+}
+.lever-track{
+  position:absolute;left:50%;transform:translateX(-50%);
+  width:14px;height:64px;
+  background:linear-gradient(180deg,var(--bsh) 0%,var(--bf) 50%,var(--bsh) 100%);
+  border:2px solid var(--bd);
+  box-shadow:inset 1px 1px 0 rgba(255,255,255,.12),inset -1px -1px 0 rgba(0,0,0,.3);
+  border-radius:3px;
+}
+.lever-notch-top,.lever-notch-bot{
+  position:absolute;left:50%;transform:translateX(-50%);
+  width:18px;height:4px;
+  background:var(--bd);border-radius:1px;
+  box-shadow:1px 1px 0 rgba(0,0,0,.3);
+}
+.lever-notch-top{top:4px}.lever-notch-bot{bottom:4px}
+.lever-handle{
+  position:absolute;left:50%;transform:translateX(-50%);
+  width:36px;height:22px;
+  background:linear-gradient(180deg,var(--bhi) 0%,var(--bf) 55%,var(--chrome) 100%);
+  border:2px solid var(--bd);
+  box-shadow:inset 1px 1px 0 rgba(255,255,255,.6),inset -1px -1px 0 var(--bsh),2px 2px 0 rgba(0,0,0,.25);
+  border-radius:3px;
+  transition:top .18s cubic-bezier(.4,0,.2,1);
+  top:4px; /* OFF = top */
+  display:flex;align-items:center;justify-content:center;
+  font-size:8px;color:var(--textd);font-family:'IBM Plex Mono',monospace;font-weight:600;
+}
+.lever-switch.on .lever-handle{
+  top:38px; /* ON = bottom */
+  background:linear-gradient(180deg,var(--bhi) 0%,var(--sel) 55%,#0d1a50 100%);
+  color:var(--selt);
+}
+.lever-switch.on .lever-track{
+  background:linear-gradient(180deg,var(--sel) 0%,var(--bf) 50%,var(--sel) 100%);
+  border-color:var(--sel);
+}
+.lever-indicator{
+  width:8px;height:8px;border-radius:50%;
+  border:1px solid var(--bd);margin:0 auto;margin-top:3px;
+  background:var(--bd);transition:background .18s;
+}
+.lever-switch.on .lever-indicator{ background:var(--grn); box-shadow:0 0 4px var(--grn); }
 
 /* ── MENUBAR ────────────────────────────────────────────────── */
 .menubar{
@@ -115,8 +257,7 @@ body::before{
   user-select:none;
 }
 [data-theme="night"] .menubar{
-  background:linear-gradient(180deg,#1a2010,#0f1208);
-  box-shadow:0 1px 0 rgba(51,255,51,.1);
+  background:linear-gradient(180deg,var(--bhi),var(--bf));
 }
 .mb-apple{
   font-size:14px;font-weight:900;padding:0 8px;height:100%;
@@ -147,8 +288,8 @@ body::before{
   min-width:200px;z-index:500;
 }
 [data-theme="night"] .dropdown{
-  background:linear-gradient(180deg,#1a2010,#0f1208);
-  box-shadow:3px 3px 0 rgba(0,0,0,.9),0 0 15px rgba(51,255,51,.08);
+  background:linear-gradient(180deg,var(--bhi),var(--bf));
+  box-shadow:3px 3px 0 rgba(0,0,0,.6);
 }
 .dd-item{
   padding:4px 18px;font-size:12px;font-weight:600;
@@ -181,7 +322,7 @@ body::before{
   display:flex;align-items:center;gap:4px;
   background:linear-gradient(180deg,var(--bhi),var(--bf));
 }
-[data-theme="night"] .mb-chip{box-shadow:0 0 4px rgba(51,255,51,.1)}
+[data-theme="night"] .mb-chip{opacity:.9}
 .mb-chip .dot{width:5px;height:5px;border-radius:50%;background:var(--grn);animation:blink2 2s ease-in-out infinite}
 @keyframes blink2{0%,100%{opacity:1}50%{opacity:.3}}
 
@@ -277,7 +418,7 @@ body::before{
 .res-icon.danger{background:#604030}.res-icon.success{background:#304830}.res-icon.warning{background:#605030}
 .res-name{font-family:'VT323',monospace;font-size:28px;line-height:1}
 .res-name.danger{color:var(--red)}.res-name.success{color:var(--grn)}.res-name.warning{color:var(--amb)}
-[data-theme="night"] .res-name{text-shadow:0 0 10px currentColor}
+[data-theme="night"] .res-name{opacity:1}
 .chip{display:inline-block;border:2px solid var(--bd);box-shadow:1px 1px 0 var(--bd);padding:1px 7px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-top:3px}
 .chip.High{background:#604030;color:var(--red)}.chip.Moderate{background:#605030;color:var(--amb)}.chip.Low{background:#304830;color:var(--grn)}
 .prog-wrap{margin:9px 0 3px}
@@ -303,11 +444,11 @@ body::before{
   padding:6px;position:relative;overflow:hidden;
   margin-bottom:10px;
 }
-[data-theme="night"] .hb-container{background:#020802;box-shadow:inset 2px 2px 3px rgba(0,0,0,.4),0 0 10px rgba(255,51,51,.08)}
+[data-theme="night"] .hb-container{background:var(--inp)}
 .hb-label{font-size:9px;color:var(--textd);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;display:flex;justify-content:space-between}
 #ecg-canvas{display:block;width:100%;height:52px}
 .hb-rate{font-family:'VT323',monospace;font-size:22px;color:var(--red);text-align:center;margin-top:3px;line-height:1}
-[data-theme="night"] .hb-rate{text-shadow:0 0 10px var(--red)}
+[data-theme="night"] .hb-rate{opacity:1}
 
 /* ── CHARTS ─────────────────────────────────────────────────── */
 .chart-canvas-wrap{padding:8px;position:relative;height:175px}
@@ -330,13 +471,13 @@ canvas{max-height:155px}
 .tb-sep{width:1px;height:18px;background:linear-gradient(180deg,transparent,var(--bdm),transparent);margin:0 2px}
 .tb-right{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--textm)}
 .tb-clock{border:2px solid var(--bdm);background:var(--inp);box-shadow:inset 1px 1px 2px rgba(0,0,0,.1);padding:0 7px;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--text);height:20px;display:flex;align-items:center}
-[data-theme="night"] .tb-clock{text-shadow:0 0 6px var(--grn)}
+[data-theme="night"] .tb-clock{opacity:1}
 
 /* ── TEAM MODAL ─────────────────────────────────────────────── */
 #team-modal{display:none;position:fixed;inset:0;z-index:800;background:var(--mo);align-items:center;justify-content:center;backdrop-filter:blur(2px)}
 #team-modal.open{display:flex}
 .team-win{background:var(--mg);border:2px solid var(--bd);box-shadow:inset 1px 1px 0 var(--bhi),5px 5px 0 rgba(0,0,0,.4);width:min(940px,96vw);max-height:92vh;display:flex;flex-direction:column;animation:wdrop .25s cubic-bezier(.2,.8,.4,1)}
-[data-theme="night"] .team-win{box-shadow:inset 1px 1px 0 var(--bhi),5px 5px 0 rgba(0,0,0,.9),0 0 40px rgba(51,255,51,.06)}
+[data-theme="night"] .team-win{box-shadow:inset 1px 1px 0 var(--bhi),5px 5px 0 rgba(0,0,0,.7)}
 @keyframes wdrop{from{transform:translateY(-16px) scale(.97);opacity:0}to{transform:none;opacity:1}}
 .team-body{padding:16px;overflow-y:auto;flex:1}
 .team-hdr{text-align:center;padding:6px 0 14px;border-bottom:2px solid var(--bdm);margin-bottom:16px}
@@ -355,9 +496,9 @@ canvas{max-height:155px}
 .mphoto-ph small{font-size:7px;color:var(--textd);text-align:center;line-height:1.2}
 .minfo{padding:0 10px 10px}
 .mfullname{font-family:'VT323',monospace;font-size:20px;color:var(--text);line-height:1.1;margin-bottom:0}
-[data-theme="night"] .mfullname{text-shadow:0 0 8px var(--grn)}
+[data-theme="night"] .mfullname{opacity:1}
 .mrole{font-size:8px;font-weight:600;color:var(--acc);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;line-height:1.4}
-[data-theme="night"] .mrole{color:var(--teal,#33ffff)}
+[data-theme="night"] .mrole{color:var(--acc)}
 .rkey{font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--textd);border-bottom:1px dashed var(--bdm);margin-bottom:3px;padding-bottom:1px;margin-top:6px}
 .rval{font-size:9px;color:var(--textm);line-height:1.5}
 .sk-chips{display:flex;flex-wrap:wrap;gap:3px;margin-top:2px}
@@ -367,7 +508,7 @@ canvas{max-height:155px}
 
 /* ── MEDICAL CROSS DECORATORS ───────────────────────────────── */
 .med-cross{color:var(--red);font-size:10px;opacity:.6;margin-right:4px}
-[data-theme="night"] .med-cross{color:var(--red);text-shadow:0 0 6px var(--red)}
+[data-theme="night"] .med-cross{color:var(--red)}
 
 /* ── PRINT / PDF STYLES ─────────────────────────────────────── */
 @media print{
@@ -392,7 +533,7 @@ canvas{max-height:155px}
   max-width:280px;
 }
 #toast.show{transform:translateX(0)}
-[data-theme="night"] #toast{box-shadow:3px 3px 0 rgba(0,0,0,.9),0 0 12px rgba(51,255,51,.1)}
+[data-theme="night"] #toast{box-shadow:3px 3px 0 rgba(0,0,0,.7)}
 
 ::-webkit-scrollbar{width:14px;height:14px}
 ::-webkit-scrollbar-track{background:var(--chrome);border:1px solid var(--bdm)}
@@ -402,13 +543,30 @@ canvas{max-height:155px}
 </head>
 <body>
 
+<!-- ════ SVG GOO FILTER ════ -->
+<svg style="position:absolute;width:0;height:0">
+  <defs>
+    <filter id="goo">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur"/>
+      <feColorMatrix in="blur" mode="matrix"
+        values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -8"
+        result="goo"/>
+      <feBlend in="SourceGraphic" in2="goo"/>
+    </filter>
+  </defs>
+</svg>
+
 <!-- ════ BOOT ════ -->
 <div id="boot">
-  <div class="boot-logo">D P S</div>
-  <div class="boot-tagline">Diagnostic Prediction Suite v2.0</div>
-  <div class="boot-pre" id="boot-pre"></div>
+  <div class="morph-wrap">
+    <div class="morph-text" id="morph-text">DPS</div>
+  </div>
+  <div class="boot-sub-label">Diagnostic Prediction Suite v2.0</div>
   <div class="boot-bar-wrap"><div class="boot-bar-fill" id="bpf"></div></div>
   <div class="boot-status" id="bst">Initializing...</div>
+  <button class="boot-enter-btn" id="boot-enter-btn" onclick="enterDPS()">
+    <div class="lg-btn">▶ &nbsp;ENTER DPS</div>
+  </button>
 </div>
 
 <!-- ════ TEAM MODAL ════ -->
@@ -450,6 +608,7 @@ canvas{max-height:155px}
             <div class="rkey">Interests</div>
             <div class="rval">Robotics &nbsp;·&nbsp; Embedded Systems &nbsp;·&nbsp; AI/ML &nbsp;·&nbsp; Frontend Design</div>
           </div>
+          <div class="img-hint">&#128247; Add photo: predictor/static/images/siddharth.jpg</div>
         </div>
 
         <!-- ARPIT -->
@@ -472,6 +631,7 @@ canvas{max-height:155px}
             <div class="rkey">Interests</div>
             <div class="rval">Data Science &nbsp;·&nbsp; Statistical Modeling &nbsp;·&nbsp; Healthcare AI</div>
           </div>
+          <div class="img-hint">&#128247; Add photo: predictor/static/images/arpit.jpg</div>
         </div>
 
         <!-- KANAK -->
@@ -494,6 +654,7 @@ canvas{max-height:155px}
             <div class="rkey">Interests</div>
             <div class="rval">UI/UX Design &nbsp;·&nbsp; Web Development &nbsp;·&nbsp; Technical Writing</div>
           </div>
+          <div class="img-hint">&#128247; Add photo: predictor/static/images/kanak.jpg</div>
         </div>
 
       </div>
@@ -677,9 +838,21 @@ canvas{max-height:155px}
             {% endif %}
           </div>
           <hr class="mac-hr">
-          <div class="btn-row">
+          <div class="btn-row" style="align-items:flex-end">
             <button type="button" class="mac-btn" id="clr-btn" onclick="clearForm()">Clear</button>
-            {% if result %}<button type="button" class="mac-btn" onclick="exportPDF()">&#128196; Export PDF</button>{% endif %}
+            {% if result %}<button type="button" class="mac-btn" onclick="exportPDF()">&#128196; PDF</button>{% endif %}
+            <!-- LEVER SWITCH -->
+            <div class="lever-wrap" title="Flip to run prediction">
+              <div class="lever-label">RUN<br>PREDICT</div>
+              <div class="lever-switch" id="lever" onclick="leverToggle()">
+                <div class="lever-track">
+                  <div class="lever-notch-top"></div>
+                  <div class="lever-notch-bot"></div>
+                </div>
+                <div class="lever-handle" id="lever-handle">OFF</div>
+                <div class="lever-indicator" id="lever-ind"></div>
+              </div>
+            </div>
             <button type="submit" class="mac-btn default" id="sub-btn">&#10010; Run Prediction</button>
           </div>
         </form>
@@ -921,62 +1094,137 @@ function toggleTypingSfx() {
 }
 
 /* ════════════════════════════════════════════════
-   BOOT SEQUENCE
+   GOOEY TEXT MORPHING BOOT
 ════════════════════════════════════════════════ */
-const BOOT_LINES = [
-  'DPS BIOS v2.0 — Diagnostic Prediction Suite',
-  'Copyright © 2025 MUIT Noida. All rights reserved.',
-  '',
-  'CPU: Intel Core i7 — 2.8GHz',
-  'RAM: 8192 MB OK',
-  'Initializing neural subsystems...',
-  'Loading diabetes_model_bundle.pkl ... OK',
-  'Loading heart_model_bundle.pkl ... OK',
-  'Mounting diabetes.csv ... 768 records',
-  'Mounting heart_disease.csv ... 4000 records',
-  'SMOTE augmentation verified ... OK',
-  'Django ORM initialized ... OK',
-  'Starting DPS Diagnostic Interface...',
-  '',
-  'Press any key to continue_',
+const MORPH_WORDS = ['DPS','BOOT','INIT','LOAD','DATA','MLIT','DIAB','HEART','READY'];
+const BOOT_STATUSES = [
+  'Loading kernel modules...','Initializing memory...','Mounting volumes...',
+  'Loading diabetes_model_bundle...','Loading heart_model_bundle...',
+  'Verifying SMOTE augmentation...','Starting Django ORM...',
+  'Calibrating prediction engine...','System ready.',
 ];
-const bootPre  = document.getElementById('boot-pre');
+
+let morphIdx = 0;
+let morphTimer = null;
+let morphProgress = 0;
+
+const morphEl  = document.getElementById('morph-text');
 const bootBar  = document.getElementById('bpf');
 const bootStat = document.getElementById('bst');
 const bootEl   = document.getElementById('boot');
 const desk     = document.getElementById('desk');
+const enterBtn = document.getElementById('boot-enter-btn');
 
-let lineIdx = 0;
-function printNextLine() {
-  if (lineIdx >= BOOT_LINES.length) return;
-  bootPre.textContent += BOOT_LINES[lineIdx] + '\n';
-  lineIdx++;
-  if (lineIdx < BOOT_LINES.length) setTimeout(printNextLine, 80 + Math.random() * 60);
+function morphStep() {
+  const prev = MORPH_WORDS[morphIdx % MORPH_WORDS.length];
+  const next = MORPH_WORDS[(morphIdx + 1) % MORPH_WORDS.length];
+  morphIdx++;
+
+  const steps = 12;
+  let step = 0;
+
+  function tick() {
+    const t = step / steps;
+    // interpolate: fade old chars out, new chars in with blur
+    const blur = Math.sin(t * Math.PI) * 14;
+    const opacity = step < steps / 2
+      ? 1 - (step / (steps / 2))
+      : (step - steps / 2) / (steps / 2);
+    const word = step < steps / 2 ? prev : next;
+    morphEl.style.filter = `blur(${blur * (1 - Math.abs(t - 0.5) * 1.8)}px)`;
+    morphEl.style.opacity = opacity < 0.05 ? 0.05 : opacity;
+    morphEl.textContent = word;
+    step++;
+    if (step <= steps) {
+      setTimeout(tick, 38);
+    } else {
+      morphEl.style.filter = '';
+      morphEl.style.opacity = '1';
+      // advance progress bar
+      morphProgress += 100 / (MORPH_WORDS.length - 1);
+      if (morphProgress > 100) morphProgress = 100;
+      bootBar.style.width = morphProgress + '%';
+      bootStat.textContent = BOOT_STATUSES[Math.min(morphIdx - 1, BOOT_STATUSES.length - 1)];
+
+      if (morphIdx < MORPH_WORDS.length - 1) {
+        morphTimer = setTimeout(morphStep, 220);
+      } else {
+        // boot complete — show enter button
+        morphEl.textContent = 'READY';
+        morphEl.style.opacity = '1';
+        bootStat.textContent = 'System ready. Press ENTER to launch.';
+        bootBar.style.width = '100%';
+        setTimeout(() => {
+          enterBtn.classList.add('visible');
+          sfxSuccess();
+        }, 300);
+      }
+    }
+  }
+  tick();
 }
 
-let prog = 0;
-function advBoot() {
-  prog += Math.random() * 14 + 6;
-  if (prog > 100) prog = 100;
-  bootBar.style.width = prog + '%';
-  bootStat.textContent = BOOT_LINES[Math.min(Math.floor(prog / 100 * BOOT_LINES.length), BOOT_LINES.length - 1)] || 'Launching...';
-  if (prog < 100) setTimeout(advBoot, Math.random() * 160 + 70);
-  else setTimeout(() => {
-    sfxSuccess();
+function enterDPS() {
+  sfxSubmit();
+  // ripple effect
+  const btn = enterBtn.querySelector('.lg-btn');
+  const r = document.createElement('span');
+  r.className = 'lg-btn-ripple';
+  r.style.cssText = `width:120px;height:120px;left:${btn.offsetWidth/2-60}px;top:${btn.offsetHeight/2-60}px`;
+  btn.appendChild(r);
+  setTimeout(() => r.remove(), 500);
+  // fade out
+  setTimeout(() => {
     bootEl.classList.add('fade-out');
     desk.style.opacity = '1';
     setTimeout(() => {
       bootEl.classList.add('gone');
       buildCharts();
       if (disease === 'heart') startECG();
-    }, 900);
-  }, 400);
+    }, 1000);
+  }, 200);
 }
 
 window.addEventListener('load', () => {
-  printNextLine();
-  sfxBoot(advBoot);
+  sfxBoot(() => { morphStep(); });
 });
+
+/* ════════════════════════════════════════════════
+   LEVER SWITCH
+════════════════════════════════════════════════ */
+let leverOn = false;
+let leverResetTimer = null;
+
+function leverToggle() {
+  leverOn = !leverOn;
+  const el = document.getElementById('lever');
+  const handle = document.getElementById('lever-handle');
+  el.classList.toggle('on', leverOn);
+  handle.textContent = leverOn ? 'ON' : 'OFF';
+
+  if (leverOn) {
+    sfxSubmit();
+    // flash the Run Prediction button
+    const sb = document.getElementById('sub-btn');
+    if (sb) { sb.style.transform = 'translate(2px,2px)'; setTimeout(() => sb.style.transform = '', 180); }
+    // submit form
+    setTimeout(() => {
+      const form = document.getElementById('pf');
+      if (form) form.submit();
+    }, 250);
+    // reset lever after 1.5s
+    if (leverResetTimer) clearTimeout(leverResetTimer);
+    leverResetTimer = setTimeout(() => {
+      leverOn = false;
+      const el2 = document.getElementById('lever');
+      const h2 = document.getElementById('lever-handle');
+      if (el2) el2.classList.remove('on');
+      if (h2) h2.textContent = 'OFF';
+    }, 1500);
+  } else {
+    sfxClear();
+  }
+}
 
 /* ════════════════════════════════════════════════
    TYPING & CLICK SOUNDS

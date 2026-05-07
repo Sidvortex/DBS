@@ -1,5 +1,4 @@
-# 🩺 Diabetes Prediction System
-
+# 🩺 Diagnostic Prediction Suite
 > A machine learning–powered web application for diabetes risk analysis, built with Django and scikit-learn — styled with a retro Apple Macintosh System 7/8 interface.
 
 ---
